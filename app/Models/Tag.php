@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Tag extends Model
+{
+    protected $fillable = ['name'];
+
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'book_tags');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_tags');
+    }
+}

@@ -48,13 +48,11 @@ class User extends Authenticatable
         ];
     }
 
-    // User belongs to a role
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
-    // User has one library (if library account)
     public function library()
     {
         return $this->hasOne(Library::class);
@@ -64,8 +62,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
-
-    // User preferences (tags)
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'user_tags');

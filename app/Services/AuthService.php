@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\User;
+use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+class AuthService
+{
+    public function register(array $data): User
+    {
+        $isFirstUser = User::count() === 0;
+
+        if ($isFirstUser) {
+            $role = Role::where('name', 'admin')->first();
+        } else {
+            $role = Role::where('name', $data['role'])->first();
+        }
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role_id' => $role->id
+        ]);
+
+        if (!empty($data['tags'])) {
+            $user->tags()->attach($data['tags']);
+        }
+
+        if ($role->name === 'library') {
+            $user->library()->create([
+                'name' => $data['library_name'],
+                'address' => $data['address'],
+                'geo_lat' => $data['geo_lat'] ?? null,
+                'geo_lng' => $data['geo_lng'] ?? null,
+            ]);
+        }
+
+        Auth::login($user);
+
+        return $user;
+    }
+
+    public function login(array $credentials): bool
+    {
+        return Auth::attempt($credentials);
+    }
+
+    public function logout(): void
+    {
+        Auth::logout();
+    }
+}

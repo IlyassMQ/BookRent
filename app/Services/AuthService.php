@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services;
 
 use App\Models\User;
@@ -9,14 +8,14 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-    public function register(array $data): User
+    public function register(array $data)
     {
         $isFirstUser = User::count() === 0;
 
         if ($isFirstUser) {
-            $role = Role::where('name', 'admin')->first();
+            $role = Role::firstOrCreate(['name' => 'admin']);
         } else {
-            $role = Role::where('name', $data['role'])->first();
+            $role = Role::firstOrCreate(['name' => 'user']);
         }
 
         $user = User::create([
@@ -28,15 +27,6 @@ class AuthService
 
         if (!empty($data['tags'])) {
             $user->tags()->attach($data['tags']);
-        }
-
-        if ($role->name === 'library') {
-            $user->library()->create([
-                'name' => $data['library_name'],
-                'address' => $data['address'],
-                'geo_lat' => $data['geo_lat'] ?? null,
-                'geo_lng' => $data['geo_lng'] ?? null,
-            ]);
         }
 
         Auth::login($user);

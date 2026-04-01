@@ -26,13 +26,8 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
-            'role' => 'required|in:user,library',
             'tags' => 'array',
             'tags.*' => 'exists:tags,id',
-            'library_name' => 'required_if:role,library|string|max:255',
-            'address' => 'required_if:role,library|string|max:255',
-            'geo_lat' => 'nullable|numeric',
-            'geo_lng' => 'nullable|numeric',
         ];
     }
 }

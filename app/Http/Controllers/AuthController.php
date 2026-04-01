@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    protected $authService;
+    private $authService;
 
     public function __construct(AuthService $authService)
     {
@@ -19,16 +19,16 @@ class AuthController extends Controller
 
     public function showRegister()
     {
-        return view('auth.register', [
-            'tags' => Tag::all()
-        ]);
+        $tags = Tag::all();
+        return view('auth.register', compact('tags'));
     }
 
+    
     public function register(RegisterRequest $request)
     {
         $user = $this->authService->register($request->validated());
 
-        return $this->redirectByRole($user);
+        return redirect('/dashboard');
     }
 
     public function showLogin()
@@ -39,14 +39,15 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         if (!$this->authService->login($request->validated())) {
-            return back()->withErrors([
-                'email' => 'Invalid credentials'
-            ]);
+            return back()->withErrors(['email' => 'Invalid credentials']);
         }
 
         $request->session()->regenerate();
-
-        return $this->redirectByRole(auth()->user());
+        $user = auth()->user();
+        if ($user->role->name === 'admin') {
+        return redirect('/admin/dashboard');
+        }
+        return redirect('/');
     }
 
     public function logout(Request $request)
@@ -57,14 +58,5 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
-    }
-
-    private function redirectByRole($user)
-    {
-        return match ($user->role->name) {
-            'admin' => redirect('/admin'),
-            'library' => redirect('/library'),
-            default => redirect('/dashboard'),
-        };
     }
 }

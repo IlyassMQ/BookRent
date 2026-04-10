@@ -34,12 +34,12 @@ class AuthService
         return $user;
     }
 
-    public function login(array $credentials): bool
+    public function login(array $credentials)
     {
         return Auth::attempt($credentials);
     }
 
-    public function logout(): void
+    public function logout()
     {
         Auth::logout();
     }

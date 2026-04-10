@@ -25,6 +25,7 @@ class StoreBookRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
+            'library_id' => 'required|exists:libraries,id',
             'category' => 'required|string|max:100',
             'isbn' => 'required|string|max:13|unique:books,isbn',
             'description' => 'nullable|string',

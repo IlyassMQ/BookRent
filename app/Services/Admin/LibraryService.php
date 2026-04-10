@@ -3,12 +3,13 @@
 namespace App\Services\Admin;
 
 use App\Models\Library;
+use App\Models\User;
 
 class LibraryService
 {
     public function create(array $data): Library
     {
-        return Library::create([
+        $Library = Library::create([
             'name' => $data['name'],
             'address' => $data['address'],
             'geo_lat' => $data['geo_lat'] ?? null,
@@ -16,7 +17,11 @@ class LibraryService
             'user_id' => $data['user_id'],
             'status' => 'approved',
         ]);
-    }
+        $user = User::findOrFail($data['user_id']);
+        $user->update(['role_id' => 3]);
+
+        return $Library ;
+        }
 
     public function approve(Library $library): void
     {

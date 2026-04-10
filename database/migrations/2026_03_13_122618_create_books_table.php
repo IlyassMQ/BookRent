@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('author');
             $table->string('isbn', 20)->unique();
+            $table->foreignId('library_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->text('description')->nullable();
             $table->decimal('purchase_price', 10, 2)->nullable();

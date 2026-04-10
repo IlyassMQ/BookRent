@@ -28,7 +28,7 @@ class AuthController extends Controller
     {
         $user = $this->authService->register($request->validated());
 
-        return redirect('/dashboard');
+        return redirect()->route('home');
     }
 
     public function showLogin()
@@ -45,9 +45,9 @@ class AuthController extends Controller
         $request->session()->regenerate();
         $user = auth()->user();
         if ($user->role->name === 'admin') {
-        return redirect('/admin/dashboard');
+        return redirect()->route('admin.dashboard');
         }
-        return redirect('/');
+        return redirect()->route('home');
     }
 
     public function logout(Request $request)
@@ -57,6 +57,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

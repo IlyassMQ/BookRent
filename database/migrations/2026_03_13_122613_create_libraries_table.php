@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('geo_lat', 10, 7)->nullable();
             $table->decimal('geo_lng', 10, 7)->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['pending','approved','blocked'])->default('pending');
             $table->timestamps();
         });
     }

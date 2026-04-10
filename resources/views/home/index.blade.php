@@ -7,25 +7,17 @@
     <h1 class="text-2xl font-bold">Welcome to BookRent</h1>
     <div>
         @guest
-            <a href="/login" class="mr-2 text-blue-500 hover:underline">Login</a>
-            <a href="/register" class="text-green-500 hover:underline">Register</a>
+            <a href="{{ route('login') }}" class="mr-2 text-blue-500 hover:underline">Login</a>
+            <a href="{{ route('register') }}" class="text-green-500 hover:underline">Register</a>
         @else
-            <a href="/dashboard" class="text-blue-500 hover:underline">Dashboard</a>
-            <form method="POST" action="/logout" style="display: inline;">
+            <a href="{{ route('dashboard') }}" class="text-blue-500 hover:underline">Dashboard</a>
+            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                 @csrf
                 <button type="submit" class="text-blue-500 hover:underline bg-none border-none cursor-pointer">Logout</button>
             </form>
         @endguest
     </div>
 </div>
-
-<!-- Search form -->
-<form method="GET" action="{{ route('books.search') }}" class="mb-6 flex gap-2">
-    <input type="text" name="q" placeholder="Search by title, author, category"
-           value="{{ request('q') }}" 
-           class="flex-1 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-    <button type="submit" class="px-4 bg-blue-500 text-white rounded hover:bg-blue-600">Search</button>
-</form>
 
 <!-- Books list -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

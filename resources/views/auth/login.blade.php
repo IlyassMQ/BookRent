@@ -6,7 +6,7 @@
 <div class="bg-white shadow-md rounded px-8 py-10">
     <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">Login to BookRent</h2>
 
-    <form method="POST" action="/login">
+    <form method="POST" action="{{ route('login.store') }}">
         @csrf
 
         <!-- Email -->
@@ -37,7 +37,7 @@
         </div>
 
         <p class="mt-4 text-center text-gray-500">
-            Don't have an account? <a href="/register" class="text-blue-500 hover:underline">Register</a>
+            Don't have an account? <a href="{{ route('register') }}" class="text-blue-500 hover:underline">Register</a>
         </p>
     </form>
 </div>

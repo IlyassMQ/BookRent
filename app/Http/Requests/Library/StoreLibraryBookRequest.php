@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Books;
+namespace App\Http\Requests\Library;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateBookRequest extends FormRequest
+class StoreLibraryBookRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,10 @@ class UpdateBookRequest extends FormRequest
             'author' => 'required|string|max:255',
             'category' => 'required|string|max:100',
             'description' => 'nullable|string',
-            'isbn' => 'required|string|max:20|unique:books,isbn,' . $this->book->id,
+            'isbn' => 'required|string|max:13|unique:books,isbn',
             'purchase_price' => 'required|numeric|min:0',
             'rental_price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
         ];
     }
 }

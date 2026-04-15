@@ -10,6 +10,7 @@ class Book extends Model
         'title',
         'author',
         'isbn',
+        'library_id',
         'category_id',
         'description',
         'purchase_price',
@@ -37,5 +38,10 @@ class Book extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'book_tags');
+    }
+
+    public function library()
+    {
+        return $this->belongsTo(Library::class);
     }
 }

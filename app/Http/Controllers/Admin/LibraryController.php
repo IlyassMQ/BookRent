@@ -26,7 +26,7 @@ class LibraryController extends Controller
 
     public function create()
     {
-        $users = User::whereRelation('role','name','library')->get();
+        $users = User::whereRelation('role','name','user')->get();
         return view('admin.libraries.create', compact('users'));
     }
 

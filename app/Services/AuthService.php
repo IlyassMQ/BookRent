@@ -13,16 +13,16 @@ class AuthService
         $isFirstUser = User::count() === 0;
 
         if ($isFirstUser) {
-            $role = Role::firstOrCreate(['name' => 'admin']);
+            $roleId = 1; 
         } else {
-            $role = Role::firstOrCreate(['name' => 'user']);
+            $roleId = 2; 
         }
 
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => $role->id
+            'role_id' => $roleId
         ]);
 
         if (!empty($data['tags'])) {

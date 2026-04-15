@@ -23,4 +23,8 @@ class Library extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
 }

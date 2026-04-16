@@ -66,7 +66,7 @@
 
         {{-- IMAGE --}}
         <div class="h-48 bg-gray-100">
-            <img src="{{ $book->image ? asset('storage/'.$book->image) : 'https://via.placeholder.com/300x200?text=No+Image' }}"
+            <img src="{{ $book->image ? asset('storage/'.$book->image) : asset('images/book.jpg') }}" alt="{{ $book->title }}"
                  class="w-full h-full object-cover">
         </div>
 
@@ -99,36 +99,48 @@
             </div>
 
             {{-- ACTIONS --}}
-            <div class="mt-auto">
+                <div class="mt-auto">
 
-                @guest
-                    <p class="text-xs text-gray-400">
-                        Login to interact
-                    </p>
-                @else
+        @guest
+            <p class="text-xs text-gray-400">
+                Login to interact
+            </p>
+        @else
 
-                    @if($book->totalStock > 0)
+            {{-- IF USER IS A LIBRARY --}}
+            @if(auth()->user()->library)
 
-                        <div class="flex gap-2">
-                            <button class="flex-1 bg-green-500 text-white text-sm py-1 rounded hover:bg-green-600">
-                                Rent
-                            </button>
+                <p class="text-xs text-gray-400">
+                    Library account
+                </p>
 
-                            <button class="flex-1 bg-blue-500 text-white text-sm py-1 rounded hover:bg-blue-600">
-                                Buy
-                            </button>
-                        </div>
+            @else
 
-                    @else
-                        <button disabled
-                            class="w-full bg-gray-300 text-gray-500 text-sm py-1 rounded">
-                            Not Available
+                {{-- NORMAL USER --}}
+                @if($book->totalStock > 0)
+
+                    <div class="flex gap-2">
+                        <button class="flex-1 bg-green-500 text-white text-sm py-1 rounded hover:bg-green-600">
+                            Rent
                         </button>
-                    @endif
 
-                @endguest
+                        <button class="flex-1 bg-blue-500 text-white text-sm py-1 rounded hover:bg-blue-600">
+                            Buy
+                        </button>
+                    </div>
 
-            </div>
+                @else
+                    <button disabled
+                        class="w-full bg-gray-300 text-gray-500 text-sm py-1 rounded">
+                        Not Available
+                    </button>
+                @endif
+
+            @endif
+
+        @endguest
+
+    </div>
 
         </div>
 

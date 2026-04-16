@@ -31,6 +31,7 @@ class StoreBookRequest extends FormRequest
             'description' => 'nullable|string',
             'purchase_price' => 'required|numeric|min:0',
             'rental_price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',            
         ];
     }
 }

@@ -23,6 +23,21 @@ class DashboardController extends Controller
             ->where('library_id', $library->id)
             ->get();
 
-        return view('library.dashboard', compact('library','books','stocks'));
+        $booksCount = $books->count();
+
+        $totalStock = $stocks->sum('quantity');
+
+        $totalValue = $stocks->sum(function ($stock) {
+            return $stock->quantity * ($stock->book->purchase_price ?? 0);
+        });
+
+        return view('library.dashboard', compact(
+            'library',
+            'books',
+            'stocks',
+            'booksCount',
+            'totalStock',
+            'totalValue'
+        ));
     }
 }

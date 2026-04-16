@@ -9,7 +9,12 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $books = Book::with('tags')->paginate(12);
+        $books = Book::with(['tags','stocks.library'])->paginate(12);
+
+        foreach ($books as $book) {
+            $book->totalStock = $book->stocks->sum('quantity');
+        }
+
         return view('home.index', compact('books'));
     }
 }

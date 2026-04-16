@@ -27,8 +27,11 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = $this->authService->register($request->validated());
-
+        if ($user->role_id === 1) {
+        return redirect()->route('admin.dashboard');
+        }
         return redirect()->route('home');
+        
     }
 
     public function showLogin()
@@ -44,7 +47,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
         $user = auth()->user();
-        if ($user->role->name === 'admin') {
+        if ($user->role_id === 1) {
         return redirect()->route('admin.dashboard');
         }
         return redirect()->route('home');

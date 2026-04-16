@@ -31,6 +31,7 @@ class StoreLibraryBookRequest extends FormRequest
             'purchase_price' => 'required|numeric|min:0',
             'rental_price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:1',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 }

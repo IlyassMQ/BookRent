@@ -3,12 +3,18 @@ namespace App\Services\Library;
 
 use App\Models\Book;
 use App\Models\Stock;
+use Illuminate\Support\Facades\Storage;
 
 class LibraryBookService
 {
     public function create($user, array $data): Book
     {
         $libraryId = $user->library->id;
+        if (isset($data['image'])) {
+        $path = $data['image']->store('books', 'public');
+        } else {
+        $path = null;
+        }
 
         // 1) Create book
         $book = Book::create([
@@ -20,6 +26,7 @@ class LibraryBookService
             'purchase_price' => $data['purchase_price'],
             'rental_price' => $data['rental_price'],
             'library_id' => $libraryId,
+            'image' => $path,
         ]);
 
         // 2) Create stock automatically
@@ -39,6 +46,15 @@ class LibraryBookService
         abort(403);
     }
 
+    // handle image
+    if (isset($data['image'])) {
+        //delete old image
+        if ($book->image) {
+            Storage::disk('public')->delete($book->image);
+        }
+        $data['image'] = $data['image']->store('books', 'public');
+    }
+
     $book->update([
         'title' => $data['title'],
         'author' => $data['author'],
@@ -47,10 +63,11 @@ class LibraryBookService
         'category' => $data['category'],
         'purchase_price' => $data['purchase_price'],
         'rental_price' => $data['rental_price'],
+        'image' => $data['image'] ?? $book->image,
     ]);
 
     return $book;
-    }
+}
 
     public function delete($user, $book): void
     {
@@ -59,10 +76,8 @@ class LibraryBookService
         abort(403);
     }
 
-        // Delete stock first
         Stock::where('book_id', $book->id)->delete();
 
-        // Delete book
         $book->delete();
     
 }

@@ -6,6 +6,10 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Library\DashboardController;
+use App\Http\Controllers\Library\StockController;
+use App\Http\Controllers\User\UserLibraryController;
+use App\Http\Controllers\Library\LibraryBookController;
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.store');
@@ -16,7 +20,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
+// Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
@@ -57,3 +61,26 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/library/create', [UserLibraryController::class, 'create'])->name('library.create');
+    Route::post('/library', [UserLibraryController::class, 'store'])->name('library.store');
+    Route::get('/library', [UserLibraryController::class, 'index'])->name('libraries.index');
+});
+
+Route::middleware(['auth','role:library'])->prefix('library')->name('library.')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/books/create', [LibraryBookController::class, 'create'])->name('books.create');
+    Route::post('/books', [LibraryBookController::class, 'store'])->name('books.store');
+    Route::get('/books/{book}/edit', [LibraryBookController::class, 'edit'])->name('books.edit');
+    Route::put('/books/{book}', [LibraryBookController::class, 'update'])->name('books.update');
+    Route::delete('/books/{book}', [LibraryBookController::class, 'destroy'])->name('books.destroy');
+    Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+    Route::post('/stock', [StockController::class, 'store'])->name('stock.store');
+    Route::put('/stock/{stock}', [StockController::class, 'update'])->name('stock.update');
+    Route::delete('/stock/{stock}', [StockController::class, 'destroy'])->name('stock.destroy');
+        
+
+});
+

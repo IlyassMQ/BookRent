@@ -14,7 +14,8 @@ class Book extends Model
         'category_id',
         'description',
         'purchase_price',
-        'rental_price'
+        'rental_price',
+        'image',
     ];
 
     public function category()

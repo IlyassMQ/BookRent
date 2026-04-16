@@ -17,7 +17,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('library.books.store') }}" class="space-y-3">
+    <form method="POST" action="{{ route('library.books.store') }}" class="space-y-3" enctype="multipart/form-data">
         @csrf
 
         {{-- TITLE --}}
@@ -61,6 +61,8 @@
                placeholder="Initial Stock Quantity"
                value="{{ old('quantity') }}"
                class="w-full border p-2 rounded">
+
+               <input type="file" name="image" class="w-full border p-2 rounded">
 
         {{-- SUBMIT --}}
         <button class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">

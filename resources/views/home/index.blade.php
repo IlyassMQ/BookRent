@@ -54,90 +54,81 @@
     </div>
 </div>
 
-{{-- BOOKS --}}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+
+
+{{-- BOOKS GRID --}}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
 @foreach($books as $book)
 
-    @php
-        $totalStock = $book->stocks->sum('quantity');
-    @endphp
+    <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col hover:shadow-lg transition">
 
-    <div class="bg-white shadow-md rounded p-4 flex flex-col">
-
-        <h3 class="text-lg font-bold mb-1">{{ $book->title }}</h3>
-
-        <p class="text-gray-600 mb-1">Author: {{ $book->author }}</p>
-        <p class="text-gray-500 mb-2">Category: {{ $book->category }}</p>
-
-        {{-- TAGS --}}
-        <div class="flex flex-wrap gap-1 mb-2">
-            @foreach($book->tags as $tag)
-                <span class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-xs">
-                    {{ $tag->name }}
-                </span>
-            @endforeach
+        {{-- IMAGE --}}
+        <div class="h-48 bg-gray-100">
+            <img src="{{ $book->image ? asset('storage/'.$book->image) : 'https://via.placeholder.com/300x200?text=No+Image' }}"
+                 class="w-full h-full object-cover">
         </div>
 
-        {{-- STOCK --}}
-        <div class="mb-3">
-            @if($totalStock > 0)
-                <span class="text-green-600 text-sm font-semibold">
-                    Available ({{ $totalStock }} copies)
-                </span>
+        <div class="p-4 flex flex-col flex-1">
+
+            {{-- TITLE --}}
+            <h3 class="text-lg font-semibold mb-1 line-clamp-1">
+                {{ $book->title }}
+            </h3>
+
+            {{-- AUTHOR --}}
+            <p class="text-sm text-gray-600 mb-1">
+                {{ $book->author }}
+            </p>
+
+            {{-- CATEGORY --}}
+            <p class="text-xs text-gray-400 mb-2">
+                {{ $book->category }}
+            </p>
+
+            {{-- STOCK --}}
+            <div class="mb-2">
+                @if($book->totalStock > 5)
+            <span class="text-green-600">Available</span>
+            @elseif($book->totalStock > 0)
+                <span class="text-yellow-500">Limited stock</span>
             @else
-                <span class="text-red-500 text-sm font-semibold">
-                    Out of stock
-                </span>
+                <span class="text-red-500">Out of stock</span>
             @endif
-        </div>
-
-        {{-- LIBRARIES --}}
-        @if($totalStock > 0)
-            <div class="text-xs text-gray-500 mb-3">
-                Available at:
-                <ul class="list-disc ml-4">
-                    @foreach($book->stocks as $stock)
-                        @if($stock->quantity > 0)
-                            <li>
-                                {{ $stock->library->name }}
-                                ({{ $stock->quantity }})
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
             </div>
-        @endif
 
-        {{-- ACTIONS --}}
-        <div class="mt-auto">
+            {{-- ACTIONS --}}
+            <div class="mt-auto">
 
-            @guest
-                <p class="text-sm text-gray-500">
-                    Login to rent or purchase
-                </p>
-            @else
-
-                @if($totalStock > 0)
-
-                    <a href="#"
-                       class="text-white bg-green-500 px-3 py-1 rounded hover:bg-green-600 mr-2">
-                        Rent
-                    </a>
-
-                    <a href="#"
-                       class="text-white bg-blue-500 px-3 py-1 rounded hover:bg-blue-600">
-                        Purchase
-                    </a>
-
+                @guest
+                    <p class="text-xs text-gray-400">
+                        Login to interact
+                    </p>
                 @else
-                    <button disabled
-                        class="bg-gray-300 text-gray-600 px-3 py-1 rounded cursor-not-allowed">
-                        Not Available
-                    </button>
-                @endif
 
-            @endguest
+                    @if($book->totalStock > 0)
+
+                        <div class="flex gap-2">
+                            <button class="flex-1 bg-green-500 text-white text-sm py-1 rounded hover:bg-green-600">
+                                Rent
+                            </button>
+
+                            <button class="flex-1 bg-blue-500 text-white text-sm py-1 rounded hover:bg-blue-600">
+                                Buy
+                            </button>
+                        </div>
+
+                    @else
+                        <button disabled
+                            class="w-full bg-gray-300 text-gray-500 text-sm py-1 rounded">
+                            Not Available
+                        </button>
+                    @endif
+
+                @endguest
+
+            </div>
 
         </div>
 
@@ -146,6 +137,7 @@
 @endforeach
 
 </div>
+
 
 {{-- PAGINATION --}}
 <div class="mt-6">

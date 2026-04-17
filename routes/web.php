@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\LibraryController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
@@ -21,6 +22,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('/books/{book}', [HomeController::class, 'show'])->name('books.show');
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
@@ -60,12 +62,20 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/tags/{tag}', [TagController::class, 'update'])->name('tags.update');
 
     Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
+
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/library/create', [UserLibraryController::class, 'create'])->name('library.create');
     Route::post('/library', [UserLibraryController::class, 'store'])->name('library.store');
     Route::get('/library', [UserLibraryController::class, 'index'])->name('libraries.index');
+    Route::get('/recommendations', [HomeController::class, 'recommendations'])->name('recommendations');
 });
 
 Route::middleware(['auth','role:library'])->prefix('library')->name('library.')->group(function () {

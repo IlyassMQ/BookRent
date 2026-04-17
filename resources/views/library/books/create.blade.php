@@ -31,9 +31,15 @@
                class="w-full border p-2 rounded">
 
         {{-- CATEGORY --}}
-        <input type="text" name="category" placeholder="Category"
-               value="{{ old('category') }}"
-               class="w-full border p-2 rounded">
+        <select name="category_id" class="w-full mb-3 p-2 border rounded">
+            <option value="">Select Category</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}"
+                    @selected(old('category_id') == $category->id)>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
 
         {{-- DESCRIPTION --}}
         <textarea name="description" placeholder="Description (optional)"
@@ -63,6 +69,13 @@
                class="w-full border p-2 rounded">
 
                <input type="file" name="image" class="w-full border p-2 rounded">
+
+               @foreach($tags as $tag)
+              <label>
+                     <input type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                     {{ $tag->name }}
+              </label>
+              @endforeach
 
         {{-- SUBMIT --}}
         <button class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">

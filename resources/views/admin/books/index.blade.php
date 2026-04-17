@@ -29,7 +29,7 @@
 
     <td class="p-4 font-medium">{{ $book->title }}</td>
     <td class="p-4">{{ $book->author }}</td>
-    <td class="p-4">{{ $book->category }}</td>
+    <td class="p-4">{{ $book->category->name ?? 'No Category' }}</td>
 
     <td class="p-4 text-sm">
         <span class="text-green-600">Buy: {{ $book->purchase_price }}</span><br>

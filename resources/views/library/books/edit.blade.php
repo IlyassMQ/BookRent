@@ -26,8 +26,16 @@
         <input name="author" value="{{ old('author', $book->author) }}"
                class="w-full border p-2 rounded">
 
-        <input name="category" value="{{ old('category', $book->category) }}"
-               class="w-full border p-2 rounded">
+        {{-- CATEGORY --}}
+        <select name="category_id" class="w-full mb-3 p-2 border rounded">
+            <option value="">Select Category</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}"
+                    @selected(old('category_id', $book->category_id) == $category->id)>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
 
         <textarea name="description"
                   class="w-full border p-2 rounded">{{ old('description', $book->description) }}</textarea>

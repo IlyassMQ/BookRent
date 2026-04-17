@@ -25,10 +25,13 @@ class UpdateBookRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
-            'category' => 'required|string|max:100',
+            'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
             'isbn' => 'required|string|max:20|unique:books,isbn,' . $this->book->id,
             'purchase_price' => 'required|numeric|min:0',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'rental_price' => 'required|numeric|min:0',
         ];
     }

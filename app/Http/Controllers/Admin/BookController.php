@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Books\StoreBookRequest;
 use App\Http\Requests\Books\UpdateBookRequest;
 use App\Models\Book;
+use App\Models\Category;
+use App\Models\Library;
+use App\Models\Tag;
 use App\Services\Books\BookService;
 
 class BookController extends Controller
@@ -25,7 +28,10 @@ class BookController extends Controller
 
     public function create()
     {
-        return view('admin.books.create');
+        $tags = Tag::all();
+        $libraries = Library::all();
+        $categories = Category::all();
+        return view('admin.books.create', compact('tags', 'libraries','categories'));
     }
 
     public function store(StoreBookRequest $request)

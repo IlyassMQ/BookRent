@@ -25,10 +25,12 @@ class StoreLibraryBookRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
-            'category' => 'required|string|max:100',
+            'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
             'isbn' => 'required|string|max:13|unique:books,isbn',
             'purchase_price' => 'required|numeric|min:0',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
             'rental_price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:1',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',

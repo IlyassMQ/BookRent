@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Books\UpdateBookRequest;
 use App\Http\Requests\Library\StoreLibraryBookRequest;
 use App\Models\Book;
+use App\Models\Category;
+use App\Models\Library;
+use App\Models\Tag;
 use App\Services\Library\LibraryBookService;
 use Illuminate\Http\Request;
 
@@ -15,7 +18,9 @@ class LibraryBookController extends Controller
 
     public function create()
     {
-        return view('library.books.create');
+        $tags = Tag::all();
+        $categories = Category::all();
+        return view('library.books.create',compact('tags','categories'));
     }
 
     public function store(StoreLibraryBookRequest $request)
@@ -30,12 +35,13 @@ class LibraryBookController extends Controller
 
     public function edit(Book $book)
 {
-    // ownership check
     if ($book->library_id !== auth()->user()->library->id) {
         abort(403);
     }
 
-    return view('library.books.edit', compact('book'));
+    $tags = Tag::all();
+    $categories = Category::all();
+    return view('library.books.edit', compact('book', 'tags', 'categories'));
 }
 
     public function update(UpdateBookRequest $request, Book $book)

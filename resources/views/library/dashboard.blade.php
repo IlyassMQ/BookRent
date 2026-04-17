@@ -82,7 +82,7 @@
 
                         <td class="p-3 font-medium">{{ $book->title }}</td>
                         <td class="p-3">{{ $book->author }}</td>
-                        <td class="p-3">{{ $book->category }}</td>
+                        <td class="p-3">{{ $book->category->name ?? 'No Category' }}</td>
                         <td class="p-3 text-gray-500">{{ $book->isbn }}</td>
 
                         <td class="p-3 text-right flex justify-end gap-2">

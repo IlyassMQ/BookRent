@@ -63,6 +63,12 @@
                 <span class="text-sm">🏷️</span> Tags
             </a>
 
+            <a href="{{ route('admin.categories.index') }}"
+               class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition
+               {{ request()->is('admin/categories*') ? 'bg-indigo-900/50 text-indigo-300' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200' }}">
+                <span class="text-sm">🏷️</span> Categories
+            </a>
+
         </nav>
 
         <!-- User + Logout -->

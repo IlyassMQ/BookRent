@@ -19,6 +19,9 @@
             <a href="{{ route('library.dashboard') }}" class="text-blue-500 hover:underline">
                 Dashboard
             </a>
+            <a href="{{ route('recommendations') }}" class="text-green-500 hover:underline">
+                Recommendations
+            </a>
 
             {{-- LIBRARY STATUS / BUTTON --}}
             @if(auth()->user()->library)
@@ -54,14 +57,37 @@
     </div>
 </div>
 
+{{-- SEARCH --}}
+<form method="GET" action="{{ route('home') }}" class="mb-6">
 
+    <div class="flex gap-2">
 
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            placeholder="Search books, authors..."
+            class="w-full border p-2 rounded"
+        >
+
+        <button class="bg-indigo-600 text-white px-4 rounded hover:bg-indigo-700">
+            Search
+        </button>
+        @if(request('search'))
+        <a href="{{ route('home') }}" class="bg-red-600 text-white px-4 rounded hover:bg-red-700">
+            Clear
+        </a>
+        @endif
+
+    </div>
+
+</form>
 
 {{-- BOOKS GRID --}}
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
 @foreach($books as $book)
-
+<a href="{{ route('books.show', $book->id) }}">
     <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col hover:shadow-lg transition">
 
         {{-- IMAGE --}}
@@ -84,7 +110,7 @@
 
             {{-- CATEGORY --}}
             <p class="text-xs text-gray-400 mb-2">
-                {{ $book->category }}
+                {{ $book->category->name ?? 'No Category' }}
             </p>
 
             {{-- STOCK --}}
@@ -108,7 +134,7 @@
         @else
 
             {{-- IF USER IS A LIBRARY --}}
-            @if(auth()->user()->library)
+            @if(auth()->user()->library && auth()->user()->library->id === $book->library_id)
 
                 <p class="text-xs text-gray-400">
                     Library account
@@ -145,7 +171,7 @@
         </div>
 
     </div>
-
+</a>
 @endforeach
 
 </div>

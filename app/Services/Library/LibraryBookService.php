@@ -22,7 +22,7 @@ class LibraryBookService
             'author' => $data['author'],
             'isbn' => $data['isbn'],
             'description' => $data['description'] ?? null,
-            'category' => $data['category'],
+            'category_id' => $data['category_id'],
             'purchase_price' => $data['purchase_price'],
             'rental_price' => $data['rental_price'],
             'library_id' => $libraryId,
@@ -35,7 +35,7 @@ class LibraryBookService
             'book_id' => $book->id,
             'quantity' => $data['quantity'],
         ]);
-
+        $book->tags()->sync($data['tags'] ?? []);
         return $book;
     }
 
@@ -60,18 +60,17 @@ class LibraryBookService
         'author' => $data['author'],
         'isbn' => $data['isbn'],
         'description' => $data['description'] ?? null,
-        'category' => $data['category'],
+        'category_id' => $data['category_id'],
         'purchase_price' => $data['purchase_price'],
         'rental_price' => $data['rental_price'],
         'image' => $data['image'] ?? $book->image,
     ]);
-
+    $book->tags()->sync($data['tags'] ?? []);
     return $book;
 }
 
     public function delete($user, $book): void
     {
-    // Ownership check
     if ($book->library_id !== $user->library->id) {
         abort(403);
     }

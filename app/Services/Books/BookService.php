@@ -8,7 +8,8 @@ class BookService
 {
     public function create(array $data)
     {
-        return Book::create($data);
+        $book = Book::create($data);
+        $book->tags()->sync($data['tags'] ?? []);
     }
 
     public function update(Book $book, array $data)

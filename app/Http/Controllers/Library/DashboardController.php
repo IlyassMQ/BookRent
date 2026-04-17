@@ -37,7 +37,7 @@ class DashboardController extends Controller
             'stocks',
             'booksCount',
             'totalStock',
-            'totalValue'
+            'totalValue' 
         ));
     }
 }

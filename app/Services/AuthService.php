@@ -26,7 +26,7 @@ class AuthService
         ]);
 
         if (!empty($data['tags'])) {
-            $user->tags()->attach($data['tags']);
+            $user->tags()->sync($data['tags'] ?? []);
         }
 
         Auth::login($user);

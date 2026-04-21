@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Library\DashboardController;
 use App\Http\Controllers\Library\StockController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\UserLibraryController;
 use App\Http\Controllers\Library\LibraryBookController;
 
@@ -76,6 +77,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/library', [UserLibraryController::class, 'store'])->name('library.store');
     Route::get('/library', [UserLibraryController::class, 'index'])->name('libraries.index');
     Route::get('/recommendations', [HomeController::class, 'recommendations'])->name('recommendations');
+
+    //transaction 
+
+    Route::get('/my-transactions', [TransactionController::class, 'index'])
+        ->name('transactions.index');
 });
 
 Route::middleware(['auth','role:library'])->prefix('library')->name('library.')->group(function () {
@@ -93,4 +99,26 @@ Route::middleware(['auth','role:library'])->prefix('library')->name('library.')-
         
 
 });
+
+use App\Http\Controllers\PaymentController;
+
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/payment/checkout/{payment}', [PaymentController::class, 'checkout'])->name('payment.checkout');
+
+    Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+    
+    Route::get('/payment/success', [PaymentController::class, 'success'])
+        ->name('payment.success');
+
+    Route::get('/payment/cancel', [PaymentController::class, 'cancel'])
+        ->name('payment.cancel');
+
+    Route::post('/books/{book}/summary', [TransactionController::class, 'summary'])->name('books.summary');
+    Route::post('/checkout', [TransactionController::class, 'checkout'])->name('transactions.checkout');
+});
+
+Route::post('/stripe/webhook', [PaymentController::class, 'webhook']);
 

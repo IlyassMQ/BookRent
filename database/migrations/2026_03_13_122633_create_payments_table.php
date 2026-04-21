@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
             $table->enum('provider', ['stripe', 'paypal']);
-            $table->string('provider_payment_id');
+            $table->string('provider_payment_id')->nullable();
             $table->decimal('amount', 10, 2);
             $table->string('currency', 10);
-            $table->enum('status', ['pending','succeeded','failed','refunded'])->default('pending');
+            $table->enum('status', ['pending','success','failed','refunded'])->default('pending');
             $table->timestamps();
         });
     }

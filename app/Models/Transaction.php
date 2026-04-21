@@ -12,6 +12,7 @@ class Transaction extends Model
         'library_id',
         'type',
         'status',
+        'quantity',
         'rental_start',
         'rental_end',
         'code_retrait'

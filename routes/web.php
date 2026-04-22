@@ -8,7 +8,11 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Library\DashboardController;
+use App\Http\Controllers\Library\LibraryShowBooksController;
+use App\Http\Controllers\Library\LibraryTransactionController;
 use App\Http\Controllers\Library\StockController;
+use App\Http\Controllers\Library\WithdrawController;
+use App\Http\Controllers\Library\LibraryShowController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\UserLibraryController;
 use App\Http\Controllers\Library\LibraryBookController;
@@ -80,8 +84,9 @@ Route::middleware('auth')->group(function () {
 
     //transaction 
 
-    Route::get('/my-transactions', [TransactionController::class, 'index'])
-        ->name('transactions.index');
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+
+        Route::get('/library/transactions', [LibraryTransactionController::class, 'index'])->name('library.transactions');
 });
 
 Route::middleware(['auth','role:library'])->prefix('library')->name('library.')->group(function () {
@@ -96,6 +101,14 @@ Route::middleware(['auth','role:library'])->prefix('library')->name('library.')-
     Route::post('/stock', [StockController::class, 'store'])->name('stock.store');
     Route::put('/stock/{stock}', [StockController::class, 'update'])->name('stock.update');
     Route::delete('/stock/{stock}', [StockController::class, 'destroy'])->name('stock.destroy');
+
+        Route::get('/withdraw', [WithdrawController::class, 'index'])->name('withdraw.index');
+
+        Route::post('/withdraw/search', [WithdrawController::class, 'search'])->name('withdraw.search');
+
+        Route::post('/withdraw/confirm', [WithdrawController::class, 'confirm'])->name('withdraw.confirm');
+
+    
         
 
 });
@@ -118,6 +131,15 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/books/{book}/summary', [TransactionController::class, 'summary'])->name('books.summary');
     Route::post('/checkout', [TransactionController::class, 'checkout'])->name('transactions.checkout');
+
+    Route::get('/{library}', [LibraryShowController::class, 'show'])->name('library.show');
+
+    Route::get('/books/category/{category}', [LibraryShowBooksController::class, 'byCategory'])->name('books.category');
+
+    Route::get('/books/author/{author}', [LibraryShowBooksController::class, 'byAuthor'])->name('books.author');
+
+    Route::get('/books/tag/{tag}', [LibraryShowBooksController::class, 'byTag'])->name('books.tag');
+
 });
 
 Route::post('/stripe/webhook', [PaymentController::class, 'webhook']);

@@ -54,6 +54,10 @@
            class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800">
             Manage Stock
         </a>
+        <a href="{{ route('library.withdraw.index') }}"
+                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Validate Pickup
+        </a>
     </div>
 
     {{-- BOOKS TABLE --}}

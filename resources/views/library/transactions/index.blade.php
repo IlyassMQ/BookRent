@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'My Transactions')
+@section('title', 'Library Orders')
 
 @section('content')
 
 <div class="max-w-6xl mx-auto">
 
-    <h1 class="text-2xl font-bold mb-6">My Orders</h1>
+    <h1 class="text-2xl font-bold mb-6">Incoming Orders</h1>
 
     @if($transactions->isEmpty())
-        <div class="bg-white p-6 rounded shadow text-center text-gray-500">
-            You don’t have any transactions yet.
+        <div class="bg-white p-6 rounded shadow text-gray-500 text-center">
+            No transactions yet
         </div>
     @else
 
@@ -20,13 +20,15 @@
 
             <thead class="bg-gray-100 text-gray-600">
                 <tr>
+                    <th class="p-4 text-left">User</th>
                     <th class="p-4 text-left">Book</th>
                     <th class="p-4 text-left">Type</th>
-                    <th class="p-4 text-left">Quantity</th>
+                    <th class="p-4 text-left">Qty</th>
                     <th class="p-4 text-left">Rental</th>
                     <th class="p-4 text-left">Total</th>
                     <th class="p-4 text-left">Status</th>
                     <th class="p-4 text-left">Code</th>
+                    <th class="p-4 text-left">Action</th>
                 </tr>
             </thead>
 
@@ -35,12 +37,14 @@
                 @foreach($transactions as $t)
                 <tr class="border-t hover:bg-gray-50">
 
+                    {{-- USER --}}
+                    <td class="p-4">
+                        {{ $t->user->name }}
+                    </td>
+
                     {{-- BOOK --}}
-                    <td class="p-4 font-medium">
-                        <a href="{{ route('books.show', $t->book->id) }}"
-                           class="hover:underline text-indigo-600">
-                            {{ $t->book->title }}
-                        </a>
+                    <td class="p-4">
+                        {{ $t->book->title }}
                     </td>
 
                     {{-- TYPE --}}
@@ -104,6 +108,20 @@
                         @else
                             -
                         @endif
+                    </td>
+
+                    {{-- ACTION --}}
+                    <td class="p-4">
+
+                        @if($t->status === 'paid')
+                            <a href="{{ route('library.withdraw.index') }}"
+                               class="bg-green-600 text-white px-3 py-1 rounded text-xs">
+                                Confirm
+                            </a>
+                        @else
+                            -
+                        @endif
+
                     </td>
 
                 </tr>

@@ -22,11 +22,15 @@
             <h1 class="text-3xl font-bold mb-2">{{ $book->title }}</h1>
 
             <p class="text-gray-600 mb-1">
-                Author: <span class="font-medium">{{ $book->author }}</span>
+                <a href="{{ route('books.author', $book->author) }}">
+                    {{ $book->author }}
+                </a>
             </p>
 
             <p class="text-gray-500 mb-3">
-                Category: {{ $book->category->name ?? 'No Category' }}
+                <a href="{{ route('books.category', $book->category->id) }}">
+                    {{ $book->category->name ?? 'No Category' }}
+                </a>
             </p>
 
             <p class="text-gray-700 mb-5">
@@ -53,6 +57,11 @@
                     Rent (per day): {{ $book->rental_price }} DH
                 </p>
             </div>
+            @foreach($book->tags as $tag)
+                <a href="{{ route('books.tag', $tag->id) }}">
+                    {{ $tag->name }}
+                </a>
+            @endforeach
 
             {{-- LIBRARIES --}}
             <div class="mb-6">
@@ -61,7 +70,10 @@
                     @foreach($book->stocks as $stock)
                         @if($stock->quantity > 0)
                             <li>
-                                {{ $stock->library->name }} ({{ $stock->quantity }} copies)
+                                <a href="{{ route('library.show', $stock->library->id) }}"
+                                    class="text-indigo-600 hover:underline">
+                                        {{ $stock->library->name }}
+                                    </a> ({{ $stock->quantity }} copies)
                             </li>
                         @endif
                     @endforeach

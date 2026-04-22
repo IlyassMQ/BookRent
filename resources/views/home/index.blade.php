@@ -126,6 +126,9 @@
                         <span class="text-red-500">Out of stock</span>
                     @endif
                 </div>
+                <p class="text-sm text-gray-500 mb-1">
+                    {{ $book->library->name ?? 'Unknown Library' }}
+                </p>
 
                 {{-- ACTIONS --}}
                 <div class="mt-auto">

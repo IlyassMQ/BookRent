@@ -21,6 +21,13 @@
             My Orders
             </a>
 
+            @if (auth()->check() && auth()->user()->library)
+                <a href="{{ route('library.transactions') }}" class="text-green-500">
+                    Library Orders
+                </a>
+            
+            @endif
+
         </div>
 
         

@@ -1,165 +1,151 @@
-{{-- resources/views/library/dashboard.blade.php --}}
-
 @extends('layouts.app')
 
 @section('title', 'My Library')
 
 @section('content')
 
-<div class="max-w-7xl mx-auto">
+<div class="max-w-7xl mx-auto px-4 py-8">
 
     {{-- HEADER --}}
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold">{{ $library->name }}</h1>
-        <p class="text-gray-500">{{ $library->address }}</p>
+    <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-stone-800">
+            {{ $library->name }}
+        </h1>
+        <p class="text-sm text-stone-500">
+            {{ $library->address }}
+        </p>
     </div>
 
     {{-- STATS --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
 
-        <div class="bg-white p-5 rounded-xl shadow flex justify-between items-center">
-            <div>
-                <p class="text-gray-500 text-sm">Total Books</p>
-                <p class="text-2xl font-bold">{{ $booksCount }}</p>
-            </div>
-            <div class="text-indigo-500 text-3xl">📚</div>
+        <div class="bg-white border border-amber-100 rounded-2xl p-5 shadow-sm">
+            <p class="text-xs text-stone-500 mb-1">Books</p>
+            <p class="text-2xl font-semibold text-stone-800">{{ $booksCount }}</p>
         </div>
 
-        <div class="bg-white p-5 rounded-xl shadow flex justify-between items-center">
-            <div>
-                <p class="text-gray-500 text-sm">Total Stock</p>
-                <p class="text-2xl font-bold">{{ $totalStock }}</p>
-            </div>
-            <div class="text-green-500 text-3xl">📦</div>
+        <div class="bg-white border border-amber-100 rounded-2xl p-5 shadow-sm">
+            <p class="text-xs text-stone-500 mb-1">Total Stock</p>
+            <p class="text-2xl font-semibold text-amber-700">{{ $totalStock }}</p>
         </div>
 
-        <div class="bg-white p-5 rounded-xl shadow flex justify-between items-center">
-            <div>
-                <p class="text-gray-500 text-sm">Stock Value</p>
-                <p class="text-2xl font-bold">{{ $totalValue }} DH</p>
-            </div>
-            <div class="text-yellow-500 text-3xl">💰</div>
+        <div class="bg-white border border-amber-100 rounded-2xl p-5 shadow-sm">
+            <p class="text-xs text-stone-500 mb-1">Stock Value</p>
+            <p class="text-2xl font-semibold text-green-600">{{ $totalValue }} DH</p>
         </div>
 
     </div>
 
     {{-- ACTIONS --}}
-    <div class="flex gap-3 mb-6">
+    <div class="flex flex-wrap gap-3 mb-8">
+
         <a href="{{ route('library.books.create') }}"
-           class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+           class="bg-amber-700 text-white px-4 py-2 rounded-lg text-sm hover:bg-amber-800">
             + Add Book
         </a>
 
         <a href="{{ route('library.stock.index') }}"
-           class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800">
+           class="bg-stone-800 text-white px-4 py-2 rounded-lg text-sm hover:bg-black">
             Manage Stock
         </a>
+
         <a href="{{ route('library.withdraw.index') }}"
-                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    Validate Pickup
+           class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700">
+            Validate Pickup
         </a>
+
     </div>
 
-    {{-- BOOKS TABLE --}}
-    <div class="mb-10">
+    {{-- MAIN GRID --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        <h2 class="text-lg font-semibold mb-3">My Books</h2>
+        {{-- BOOKS --}}
+        <div class="bg-white border border-amber-100 rounded-2xl shadow-sm">
 
-        <div class="overflow-x-auto bg-white rounded-xl shadow">
+            <div class="p-4 border-b border-amber-100 flex justify-between items-center">
+                <h2 class="text-sm font-semibold text-stone-700">Books</h2>
+                <span class="text-xs text-stone-400">{{ $booksCount }}</span>
+            </div>
 
-            <table class="w-full text-sm">
+            <div class="divide-y">
 
-                <thead class="bg-gray-50 text-gray-600">
-                    <tr>
-                        <th class="p-3 text-left">Title</th>
-                        <th class="p-3 text-left">Author</th>
-                        <th class="p-3 text-left">Category</th>
-                        <th class="p-3 text-left">ISBN</th>
-                        <th class="p-3 text-right">Actions</th>
-                    </tr>
-                </thead>
+                @forelse($books->take(6) as $book)
+                <div class="p-4 flex justify-between items-center">
 
-                <tbody>
+                    <div>
+                        <p class="text-sm font-medium text-stone-800">
+                            {{ $book->title }}
+                        </p>
+                        <p class="text-xs text-stone-500">
+                            {{ $book->author }}
+                        </p>
+                    </div>
 
-                    @forelse($books as $book)
-                    <tr class="border-t hover:bg-gray-50">
+                    <div class="flex gap-2">
 
-                        <td class="p-3 font-medium">{{ $book->title }}</td>
-                        <td class="p-3">{{ $book->author }}</td>
-                        <td class="p-3">{{ $book->category->name ?? 'No Category' }}</td>
-                        <td class="p-3 text-gray-500">{{ $book->isbn }}</td>
+                        <a href="{{ route('library.books.edit', $book->id) }}"
+                           class="text-xs text-blue-600 hover:underline">
+                            Edit
+                        </a>
 
-                        <td class="p-3 text-right flex justify-end gap-2">
+                        <form method="POST"
+                              action="{{ route('library.books.destroy', $book->id) }}"
+                              onsubmit="return confirm('Delete this book?')">
+                            @csrf
+                            @method('DELETE')
 
-                            <a href="{{ route('library.books.edit', $book->id) }}"
-                               class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                Edit
-                            </a>
+                            <button class="text-xs text-red-600 hover:underline">
+                                Delete
+                            </button>
+                        </form>
 
-                            <form method="POST"
-                                  action="{{ route('library.books.destroy', $book->id) }}"
-                                  onsubmit="return confirm('Delete this book?')">
-                                @csrf
-                                @method('DELETE')
+                    </div>
 
-                                <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                                    Delete
-                                </button>
-                            </form>
+                </div>
 
-                        </td>
+                @empty
+                    <div class="p-6 text-center text-stone-400 text-sm">
+                        No books yet
+                    </div>
+                @endforelse
 
-                    </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="p-4 text-center text-gray-500">
-                                No books yet
-                            </td>
-                        </tr>
-                    @endforelse
-
-                </tbody>
-
-            </table>
+            </div>
 
         </div>
 
-    </div>
+        {{-- STOCK --}}
+        <div class="bg-white border border-amber-100 rounded-2xl shadow-sm">
 
-    {{-- STOCK TABLE --}}
-    <div>
+            <div class="p-4 border-b border-amber-100 flex justify-between items-center">
+                <h2 class="text-sm font-semibold text-stone-700">Stock Overview</h2>
+            </div>
 
-        <h2 class="text-lg font-semibold mb-3">My Stock</h2>
+            <div class="divide-y">
 
-        <div class="overflow-x-auto bg-white rounded-xl shadow">
+                @forelse($stocks->sortBy('quantity')->take(6) as $stock)
+                <div class="p-4 flex justify-between items-center">
 
-            <table class="w-full text-sm">
+                    <div>
+                        <p class="text-sm font-medium text-stone-800">
+                            {{ $stock->book->title }}
+                        </p>
+                    </div>
 
-                <thead class="bg-gray-50 text-gray-600">
-                    <tr>
-                        <th class="p-3 text-left">Book</th>
-                        <th class="p-3 text-left">Quantity</th>
-                    </tr>
-                </thead>
+                    <span class="text-sm font-semibold
+                        {{ $stock->quantity > 5 ? 'text-green-600' :
+                           ($stock->quantity > 0 ? 'text-yellow-600' : 'text-red-600') }}">
+                        {{ $stock->quantity }}
+                    </span>
 
-                <tbody>
+                </div>
 
-                    @forelse($stocks as $stock)
-                    <tr class="border-t hover:bg-gray-50">
-                        <td class="p-3">{{ $stock->book->title }}</td>
-                        <td class="p-3 font-medium">{{ $stock->quantity }}</td>
-                    </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="p-4 text-center text-gray-500">
-                                No stock yet
-                            </td>
-                        </tr>
-                    @endforelse
+                @empty
+                    <div class="p-6 text-center text-stone-400 text-sm">
+                        No stock yet
+                    </div>
+                @endforelse
 
-                </tbody>
-
-            </table>
+            </div>
 
         </div>
 

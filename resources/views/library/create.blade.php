@@ -1,49 +1,78 @@
-{{-- resources/views/library/create.blade.php --}}
-
 @extends('layouts.app')
 
 @section('title', 'Create Library')
 
 @section('content')
 
-<div class="max-w-lg mx-auto bg-white p-6 rounded shadow">
+<div class="max-w-2xl mx-auto px-4 py-8">
 
-    <h2 class="text-xl font-bold mb-4">Create Your Library</h2>
+    <div class="bg-white border border-amber-100 rounded-2xl shadow-sm p-6">
 
-    {{-- ERRORS --}}
-    @if($errors->any())
-        <div class="bg-red-100 text-red-600 p-3 mb-4 rounded">
-            @foreach($errors->all() as $error)
-                <div>- {{ $error }}</div>
-            @endforeach
+        {{-- HEADER --}}
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold text-stone-800">
+                Create Your Library
+            </h2>
+            <p class="text-sm text-stone-500">
+                Add your library details and choose its location
+            </p>
         </div>
-    @endif
 
-    <form method="POST" action="{{ route('library.store') }}" onsubmit="return checkLocation()">
-        @csrf
+        {{-- ERRORS --}}
+        @if($errors->any())
+            <div class="bg-red-50 text-red-600 px-4 py-3 rounded-lg mb-5 text-sm space-y-1">
+                @foreach($errors->all() as $error)
+                    <div>• {{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
 
-        {{-- NAME --}}
-        <input type="text" name="name" placeholder="Library Name"
-               class="w-full border p-2 rounded mb-3">
+        <form method="POST"
+              action="{{ route('library.store') }}"
+              onsubmit="return checkLocation()"
+              class="space-y-5">
+            @csrf
 
-        {{-- ADDRESS --}}
-        <input type="text" name="address" placeholder="Address"
-               class="w-full border p-2 rounded mb-3">
+            {{-- NAME --}}
+            <div>
+                <label class="text-sm text-stone-600">Library Name</label>
+                <input type="text" name="name"
+                       class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
 
-        {{-- HIDDEN LAT LNG --}}
-        <input type="hidden" name="geo_lat" id="geo_lat">
-        <input type="hidden" name="geo_lng" id="geo_lng">
+            {{-- ADDRESS --}}
+            <div>
+                <label class="text-sm text-stone-600">Address</label>
+                <input type="text" name="address"
+                       class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
 
-        {{-- MAP --}}
-        <label class="block mb-2 font-medium">Choose Location on Map</label>
-        <div id="map" class="w-full h-64 rounded mb-4 border"></div>
+            {{-- HIDDEN GEO --}}
+            <input type="hidden" name="geo_lat" id="geo_lat">
+            <input type="hidden" name="geo_lng" id="geo_lng">
 
-        {{-- SUBMIT --}}
-        <button class="w-full bg-indigo-600 text-white py-2 rounded">
-            Create Library
-        </button>
+            {{-- MAP --}}
+            <div>
+                <label class="text-sm text-stone-600 mb-2 block">
+                    Select Location on Map
+                </label>
 
-    </form>
+                <div id="map"
+                     class="w-full h-64 rounded-xl border border-stone-200 shadow-sm"></div>
+
+                <p class="text-xs text-stone-400 mt-2">
+                    Click anywhere on the map to place your library location
+                </p>
+            </div>
+
+            {{-- SUBMIT --}}
+            <button class="w-full bg-amber-700 text-white py-2.5 rounded-lg font-medium hover:bg-amber-800 transition">
+                Create Library
+            </button>
+
+        </form>
+
+    </div>
 
 </div>
 
@@ -52,12 +81,10 @@
 
 @section('scripts')
 
-{{-- LEAFLET --}}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-    // Default map location (you can change city)
     var map = L.map('map').setView([33.5731, -7.5898], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -66,26 +93,21 @@
 
     var marker;
 
-    // When user clicks map
     map.on('click', function(e) {
 
         var lat = e.latlng.lat;
         var lng = e.latlng.lng;
 
-        // Remove old marker
         if (marker) {
             map.removeLayer(marker);
         }
 
-        // Add marker
         marker = L.marker([lat, lng]).addTo(map);
 
-        // Fill hidden inputs
         document.getElementById('geo_lat').value = lat;
         document.getElementById('geo_lng').value = lng;
     });
 
-    // Prevent submit if no location selected
     function checkLocation() {
         if (!document.getElementById('geo_lat').value) {
             alert("Please select a location on the map");

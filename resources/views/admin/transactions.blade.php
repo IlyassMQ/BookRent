@@ -5,77 +5,100 @@
 
 @section('content')
 
-<div style="font-family: 'Geist', sans-serif;">
+<div class="mb-6">
+    <h2 class="text-xl font-semibold text-stone-800">All Transactions</h2>
+    <p class="text-sm text-stone-400">{{ $transactions->count() }} transactions</p>
+</div>
 
-    <div class="mb-6">
-        <h2 class="text-xl font-semibold text-gray-800">All Transactions</h2>
-        <p class="text-sm text-gray-400">{{ $transactions->count() }} transactions</p>
-    </div>
+<div class="bg-white border border-amber-100 rounded-2xl shadow-sm overflow-hidden">
 
-    <div class="bg-white border rounded-2xl shadow-sm overflow-hidden">
-        <table class="w-full text-sm">
+    <table class="w-full text-sm">
 
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-4 text-xs text-gray-400">#</th>
-                    <th class="px-6 py-4 text-xs text-gray-400">User</th>
-                    <th class="px-6 py-4 text-xs text-gray-400">Book</th>
-                    <th class="px-6 py-4 text-xs text-gray-400">Library</th>
-                    <th class="px-6 py-4 text-xs text-gray-400">Type</th>
-                    <th class="px-6 py-4 text-xs text-gray-400">Status</th>
-                </tr>
-            </thead>
+        {{-- HEADER --}}
+        <thead class="bg-amber-50 text-stone-500 text-xs uppercase tracking-wider">
+            <tr>
+                <th class="px-6 py-4 text-left">#</th>
+                <th class="px-6 py-4 text-left">User</th>
+                <th class="px-6 py-4 text-left">Book</th>
+                <th class="px-6 py-4 text-left">Library</th>
+                <th class="px-6 py-4 text-left">Type</th>
+                <th class="px-6 py-4 text-left">Status</th>
+            </tr>
+        </thead>
 
-            <tbody class="divide-y divide-gray-50">
-                @forelse($transactions as $transaction)
-                <tr class="hover:bg-gray-50">
+        {{-- BODY --}}
+        <tbody class="divide-y divide-amber-50">
 
-                    <td class="px-6 py-4 text-gray-300 text-xs">
-                        {{ $transaction->id }}
-                    </td>
+            @forelse($transactions as $transaction)
+            <tr class="hover:bg-amber-50/40 transition">
 
-                    <td class="px-6 py-4 text-gray-800">
-                        {{ $transaction->user->name }}
-                    </td>
+                {{-- ID --}}
+                <td class="px-6 py-4 text-stone-400 text-xs">
+                    #{{ $transaction->id }}
+                </td>
 
-                    <td class="px-6 py-4 text-gray-500">
-                        {{ $transaction->book->title }}
-                    </td>
+                {{-- USER --}}
+                <td class="px-6 py-4 font-medium text-stone-800">
+                    {{ $transaction->user->name }}
+                </td>
 
-                    <td class="px-6 py-4 text-gray-500">
-                        {{ $transaction->library->name }}
-                    </td>
+                {{-- BOOK --}}
+                <td class="px-6 py-4 text-stone-600">
+                    {{ $transaction->book->title }}
+                </td>
 
-                    <td class="px-6 py-4">
-                        <span class="px-2 py-1 text-xs rounded-full
-                            {{ $transaction->type === 'purchase'
-                                ? 'bg-green-50 text-green-700'
-                                : 'bg-blue-50 text-blue-700' }}">
-                            {{ ucfirst($transaction->type) }}
-                        </span>
-                    </td>
+                {{-- LIBRARY --}}
+                <td class="px-6 py-4 text-stone-500">
+                    {{ $transaction->library->name }}
+                </td>
 
-                    <td class="px-6 py-4">
-                        <span class="px-2 py-1 text-xs rounded-full
-                            {{ $transaction->status === 'completed'
-                                ? 'bg-green-50 text-green-700'
-                                : 'bg-yellow-50 text-yellow-700' }}">
-                            {{ ucfirst($transaction->status) }}
-                        </span>
-                    </td>
+                {{-- TYPE --}}
+                <td class="px-6 py-4">
+                    <span class="px-2.5 py-1 text-xs rounded-full font-medium
+                        {{ $transaction->type === 'purchase'
+                            ? 'bg-green-50 text-green-700'
+                            : 'bg-blue-50 text-blue-700' }}">
+                        {{ ucfirst($transaction->type) }}
+                    </span>
+                </td>
 
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="text-center py-10 text-gray-400">
-                        No transactions found
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
+                {{-- STATUS --}}
+                <td class="px-6 py-4">
+                    <span class="px-2.5 py-1 text-xs rounded-full font-medium
 
-        </table>
-    </div>
+                        @if($transaction->status === 'completed')
+                            bg-green-50 text-green-700
+                        @elseif($transaction->status === 'paid')
+                            bg-blue-50 text-blue-700
+                        @elseif($transaction->status === 'pending')
+                            bg-yellow-50 text-yellow-700
+                        @else
+                            bg-red-50 text-red-600
+                        @endif
+
+                    ">
+                        {{ ucfirst($transaction->status) }}
+                    </span>
+                </td>
+
+            </tr>
+
+            @empty
+            <tr>
+                <td colspan="6" class="text-center py-12 text-stone-400">
+
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="text-2xl">📚</span>
+                        <p>No transactions yet</p>
+                    </div>
+
+                </td>
+            </tr>
+            @endforelse
+
+        </tbody>
+
+    </table>
 
 </div>
 

@@ -3,73 +3,114 @@
 @section('title', 'Register')
 
 @section('content')
-<div class="bg-white shadow-md rounded px-8 py-10">
-    <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">Register for BookRent</h2>
 
-    <form method="POST" action="{{ route('register.store') }}">
+<div class="space-y-6">
+
+    {{-- HEADER --}}
+    <div class="text-center">
+        <h2 class="text-2xl font-semibold text-stone-800">
+            Create your account
+        </h2>
+        <p class="text-sm text-stone-500 mt-1">
+            Join BookRent and start exploring books
+        </p>
+    </div>
+
+    <form method="POST" action="{{ route('register.store') }}" class="space-y-4">
         @csrf
 
-        <!-- Name -->
-        <div class="mb-4">
-            <label class="block text-gray-600 mb-2" for="name">Full Name</label>
-            <input id="name" name="name" type="text" value="{{ old('name') }}" 
-                   class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+        {{-- NAME --}}
+        <div>
+            <label class="block text-sm text-stone-600 mb-1">Full Name</label>
+            <input type="text"
+                   name="name"
+                   value="{{ old('name') }}"
+                   placeholder="John Doe"
+                   class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-amber-600 text-sm">
+
             @error('name')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <!-- Email -->
-        <div class="mb-4">
-            <label class="block text-gray-600 mb-2" for="email">Email</label>
-            <input id="email" name="email" type="email" value="{{ old('email') }}" 
-                   class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+        {{-- EMAIL --}}
+        <div>
+            <label class="block text-sm text-stone-600 mb-1">Email</label>
+            <input type="email"
+                   name="email"
+                   value="{{ old('email') }}"
+                   placeholder="you@example.com"
+                   class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-amber-600 text-sm">
+
             @error('email')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <!-- Password -->
-        <div class="mb-4">
-            <label class="block text-gray-600 mb-2" for="password">Password</label>
-            <input id="password" name="password" type="password" 
-                   class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+        {{-- PASSWORD --}}
+        <div>
+            <label class="block text-sm text-stone-600 mb-1">Password</label>
+            <input type="password"
+                   name="password"
+                   placeholder="••••••••"
+                   class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-amber-600 text-sm">
+
             @error('password')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mb-4">
-            <label class="block text-gray-600 mb-2" for="password_confirmation">Confirm Password</label>
-            <input id="password_confirmation" name="password_confirmation" type="password" 
-                   class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+        {{-- CONFIRM --}}
+        <div>
+            <label class="block text-sm text-stone-600 mb-1">Confirm Password</label>
+            <input type="password"
+                   name="password_confirmation"
+                   placeholder="••••••••"
+                   class="w-full px-3 py-2 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-amber-600 text-sm">
         </div>
 
-        <!-- Tags -->
-        <div class="mb-4">
-            <label class="block text-gray-600 mb-2">Select your interests</label>
+        {{-- TAGS --}}
+        <div>
+            <label class="block text-sm text-stone-600 mb-2">
+                Your interests
+            </label>
+
             <div class="flex flex-wrap gap-2">
+
                 @foreach($tags as $tag)
-                    <label class="flex items-center gap-1 border px-2 py-1 rounded cursor-pointer hover:bg-blue-50">
-                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" 
+                    <label class="flex items-center gap-2 px-3 py-1.5 border border-stone-300 rounded-full text-xs cursor-pointer
+                                  hover:bg-amber-50 transition">
+
+                        <input type="checkbox"
+                               name="tags[]"
+                               value="{{ $tag->id }}"
+                               class="accent-amber-700"
                                {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
+
                         {{ $tag->name }}
                     </label>
                 @endforeach
+
             </div>
         </div>
 
-        <!-- Submit -->
-        <div class="mt-6">
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
-                Register
-            </button>
-        </div>
+        {{-- BUTTON --}}
+        <button type="submit"
+                class="w-full bg-amber-700 text-white py-2.5 rounded-lg hover:bg-amber-800 transition text-sm font-medium">
+            Create Account
+        </button>
 
-        <p class="mt-4 text-center text-gray-500">
-            Already have an account? <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a>
-        </p>
     </form>
+
+    {{-- FOOTER --}}
+    <p class="text-center text-sm text-stone-500">
+        Already have an account?
+        <a href="{{ route('login') }}"
+           class="text-amber-700 hover:underline font-medium">
+            Login
+        </a>
+    </p>
+
 </div>
+
 @endsection

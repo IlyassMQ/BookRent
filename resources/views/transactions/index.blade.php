@@ -1,117 +1,120 @@
 @extends('layouts.app')
 
-@section('title', 'My Transactions')
+@section('title', 'My Orders')
 
 @section('content')
 
-<div class="max-w-6xl mx-auto">
+<div class="max-w-7xl mx-auto px-4 py-8">
 
-    <h1 class="text-2xl font-bold mb-6">My Orders</h1>
+    {{-- HEADER --}}
+    <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-stone-800">
+            My Orders
+        </h1>
+        <p class="text-sm text-stone-500">
+            Track your purchases and rentals
+        </p>
+    </div>
 
+    {{-- EMPTY --}}
     @if($transactions->isEmpty())
-        <div class="bg-white p-6 rounded shadow text-center text-gray-500">
-            You don’t have any transactions yet.
+        <div class="bg-white border border-amber-100 rounded-2xl p-10 text-center text-stone-400">
+            <div class="text-4xl mb-3">📦</div>
+            <p class="font-medium">No transactions yet</p>
         </div>
     @else
 
-    <div class="bg-white rounded-xl shadow overflow-hidden">
+    {{-- GRID --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <table class="w-full text-sm">
+        @foreach($transactions as $t)
 
-            <thead class="bg-gray-100 text-gray-600">
-                <tr>
-                    <th class="p-4 text-left">Book</th>
-                    <th class="p-4 text-left">Type</th>
-                    <th class="p-4 text-left">Quantity</th>
-                    <th class="p-4 text-left">Rental</th>
-                    <th class="p-4 text-left">Total</th>
-                    <th class="p-4 text-left">Status</th>
-                    <th class="p-4 text-left">Code</th>
-                </tr>
-            </thead>
+        <div class="bg-white border border-amber-100 rounded-2xl shadow-sm p-5 flex flex-col">
 
-            <tbody>
+            {{-- BOOK --}}
+            <div class="mb-3">
+                <a href="{{ route('books.show', $t->book->id) }}"
+                   class="text-sm font-semibold text-stone-800 hover:underline">
+                    {{ $t->book->title }}
+                </a>
 
-                @foreach($transactions as $t)
-                <tr class="border-t hover:bg-gray-50">
+                <p class="text-xs text-stone-500">
+                    {{ ucfirst($t->type) }}
+                </p>
+            </div>
 
-                    {{-- BOOK --}}
-                    <td class="p-4 font-medium">
-                        <a href="{{ route('books.show', $t->book->id) }}"
-                           class="hover:underline text-indigo-600">
-                            {{ $t->book->title }}
-                        </a>
-                    </td>
+            {{-- DETAILS --}}
+            <div class="text-xs text-stone-600 space-y-1 mb-3">
 
-                    {{-- TYPE --}}
-                    <td class="p-4 capitalize">
-                        {{ $t->type }}
-                    </td>
+                <p>Quantity: {{ $t->quantity }}</p>
 
-                    {{-- QUANTITY --}}
-                    <td class="p-4">
-                        {{ $t->quantity }}
-                    </td>
+                @if($t->type === 'rental')
+                    <p>
+                        {{ \Carbon\Carbon::parse($t->rental_start)->format('d M') }}
+                        →
+                        {{ \Carbon\Carbon::parse($t->rental_end)->format('d M') }}
+                    </p>
+                @endif
 
-                    {{-- RENTAL --}}
-                    <td class="p-4 text-xs text-gray-600">
-                        @if($t->type === 'rental')
-                            {{ \Carbon\Carbon::parse($t->rental_start)->format('d M') }}
-                            →
-                            {{ \Carbon\Carbon::parse($t->rental_end)->format('d M') }}
-                        @else
-                            -
-                        @endif
-                    </td>
+            </div>
 
-                    {{-- TOTAL --}}
-                    <td class="p-4 font-semibold">
-                        {{ $t->payment->amount ?? 0 }} DH
-                    </td>
+            {{-- TOTAL --}}
+            <div class="text-sm font-semibold text-amber-700 mb-3">
+                {{ $t->payment->amount ?? 0 }} DH
+            </div>
 
-                    {{-- STATUS --}}
-                    <td class="p-4">
+            {{-- STATUS --}}
+            <div class="mb-3">
+                <span class="px-2 py-1 rounded text-xs font-medium
+                    @if($t->status === 'pending')
+                        bg-yellow-50 text-yellow-700
+                    @elseif($t->status === 'paid')
+                        bg-blue-50 text-blue-700
+                    @elseif($t->status === 'completed')
+                        bg-green-50 text-green-700
+                    @else
+                        bg-red-50 text-red-700
+                    @endif">
+                    {{ ucfirst($t->status) }}
+                </span>
+            </div>
 
-                        @if($t->status === 'pending')
-                            <span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded text-xs">
-                                Pending
-                            </span>
+            {{-- CODE / ACTION --}}
+            <div class="mt-auto text-xs">
 
-                        @elseif($t->status === 'paid')
-                            <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">
-                                Paid
-                            </span>
+                @if($t->status === 'paid')
+                    <div class="bg-stone-100 p-2 rounded mb-2">
+                        <p class="text-stone-500">Pickup Code</p>
+                        <p class="font-mono text-sm text-stone-800">
+                            {{ $t->code_retrait }}
+                        </p>
+                    </div>
 
-                        @elseif($t->status === 'completed')
-                            <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">
-                                Completed
-                            </span>
+                    <p class="text-green-600 font-medium">
+                        Go to library to collect your book
+                    </p>
 
-                        @else
-                            <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs">
-                                Cancelled
-                            </span>
-                        @endif
+                @elseif($t->status === 'completed')
+                    <p class="text-green-600 font-medium">
+                        Completed
+                    </p>
 
-                    </td>
+                @elseif($t->status === 'pending')
+                    <p class="text-yellow-600">
+                        Waiting for payment confirmation
+                    </p>
 
-                    {{-- CODE --}}
-                    <td class="p-4">
-                        @if($t->status === 'paid' || $t->status === 'completed')
-                            <span class="bg-gray-200 px-2 py-1 rounded text-xs font-mono">
-                                {{ $t->code_retrait }}
-                            </span>
-                        @else
-                            -
-                        @endif
-                    </td>
+                @else
+                    <p class="text-red-500">
+                        Transaction cancelled
+                    </p>
+                @endif
 
-                </tr>
-                @endforeach
+            </div>
 
-            </tbody>
+        </div>
 
-        </table>
+        @endforeach
 
     </div>
 

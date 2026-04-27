@@ -5,75 +5,86 @@
 
 @section('content')
 
-<div style="font-family: 'Geist', sans-serif;">
+<div>
 
-    {{-- Header Bar --}}
+    {{-- HEADER --}}
     <div class="flex items-center justify-between mb-6">
         <div>
-            <h2 class="text-xl font-semibold text-gray-800">All Users</h2>
-            <p class="text-sm text-gray-400 mt-0.5">{{ $users->count() }} registered users</p>
+            <h2 class="text-xl font-semibold text-stone-800">All Users</h2>
+            <p class="text-sm text-stone-400 mt-0.5">{{ $users->count() }} registered users</p>
         </div>
+
         <a href="{{ route('admin.users.create') }}"
-           class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+           class="inline-flex items-center gap-2 bg-amber-700 hover:bg-amber-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition shadow-sm">
             + Add User
         </a>
     </div>
 
-    {{-- Table Card --}}
-    <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+    {{-- TABLE CARD --}}
+    <div class="bg-white border border-amber-100 rounded-2xl shadow-sm overflow-hidden">
         <table class="w-full text-sm">
 
-            <thead>
-                <tr class="border-b border-gray-100 bg-gray-50/60">
-                    <th class="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-6 py-4 w-12">#</th>
-                    <th class="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-6 py-4">User</th>
-                    <th class="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-6 py-4">Email</th>
-                    <th class="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-6 py-4">Role</th>
-                    <th class="text-right text-xs font-semibold text-gray-400 uppercase tracking-wider px-6 py-4">Actions</th>
+            {{-- HEADER --}}
+            <thead class="bg-amber-50 text-stone-500 text-xs uppercase tracking-wider">
+                <tr>
+                    <th class="text-left px-6 py-4 w-12">#</th>
+                    <th class="text-left px-6 py-4">User</th>
+                    <th class="text-left px-6 py-4">Email</th>
+                    <th class="text-left px-6 py-4">Role</th>
+                    <th class="text-right px-6 py-4">Actions</th>
                 </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-50">
+            {{-- BODY --}}
+            <tbody class="divide-y divide-amber-50">
                 @forelse($users as $user)
-                    <tr class="hover:bg-gray-50/50 transition-colors group">
+                    <tr class="hover:bg-amber-50/40 transition">
 
                         {{-- ID --}}
-                        <td class="px-6 py-4 text-gray-300 font-mono text-xs">
-                            {{ str_pad($user->id, 3, '0', STR_PAD_LEFT) }}
+                        <td class="px-6 py-4 text-stone-400 font-mono text-xs">
+                            #{{ str_pad($user->id, 3, '0', STR_PAD_LEFT) }}
                         </td>
 
-                        {{-- User with Avatar --}}
+                        {{-- USER --}}
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 font-semibold text-xs flex items-center justify-center flex-shrink-0">
+
+                                <div class="w-9 h-9 rounded-full bg-amber-100 text-amber-700 font-semibold text-xs flex items-center justify-center">
                                     {{ strtoupper(substr($user->name, 0, 2)) }}
                                 </div>
-                                <span class="font-medium text-gray-800">{{ $user->name }}</span>
+
+                                <span class="font-medium text-stone-800">
+                                    {{ $user->name }}
+                                </span>
+
                             </div>
                         </td>
 
-                        {{-- Email --}}
-                        <td class="px-6 py-4 text-gray-500">
+                        {{-- EMAIL --}}
+                        <td class="px-6 py-4 text-stone-500">
                             {{ $user->email }}
                         </td>
 
-                        {{-- Role Badge --}}
+                        {{-- ROLE --}}
                         <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                            <span class="px-2.5 py-1 text-xs rounded-full font-medium
+
                                 @if($user->role->name === 'admin')
-                                    bg-purple-50 text-purple-700
+                                    bg-amber-100 text-amber-800
                                 @else
-                                    bg-emerald-50 text-emerald-700
-                                @endif">
+                                    bg-stone-100 text-stone-700
+                                @endif
+                            ">
                                 {{ ucfirst($user->role->name) }}
                             </span>
                         </td>
 
-                        {{-- Actions --}}
+                        {{-- ACTIONS --}}
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-end gap-2">
+
                                 <a href="{{ route('admin.users.edit', $user) }}"
-                                   class="text-xs text-gray-400 hover:text-indigo-600 font-medium transition px-2 py-1 rounded hover:bg-indigo-50">
+                                   class="text-xs text-stone-500 hover:text-amber-700 transition px-2 py-1 rounded hover:bg-amber-50">
                                     Edit
                                 </a>
 
@@ -81,21 +92,28 @@
                                       onsubmit="return confirm('Delete {{ $user->name }}? This cannot be undone.')">
                                     @csrf
                                     @method('DELETE')
+
                                     <button type="submit"
-                                            class="text-xs text-gray-400 hover:text-red-600 font-medium transition px-2 py-1 rounded hover:bg-red-50">
+                                            class="text-xs text-stone-500 hover:text-red-600 transition px-2 py-1 rounded hover:bg-red-50">
                                         Delete
                                     </button>
                                 </form>
+
                             </div>
                         </td>
 
                     </tr>
+
                 @empty
                     <tr>
                         <td colspan="5" class="px-6 py-16 text-center">
-                            <div class="text-gray-300 text-4xl mb-3">👤</div>
-                            <p class="text-gray-400 font-medium">No users found</p>
-                            <p class="text-gray-300 text-xs mt-1">Add your first user to get started</p>
+
+                            <div class="flex flex-col items-center gap-2 text-stone-400">
+                                <span class="text-4xl">👤</span>
+                                <p class="font-medium">No users found</p>
+                                <p class="text-xs">Add your first user to get started</p>
+                            </div>
+
                         </td>
                     </tr>
                 @endforelse

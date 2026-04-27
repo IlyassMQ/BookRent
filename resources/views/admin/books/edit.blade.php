@@ -1,33 +1,121 @@
 @extends('layouts.admin')
 
+@section('title', 'Edit Book')
+@section('header', 'Edit Book')
+
 @section('content')
 
-<div class="max-w-lg mx-auto bg-white p-6 rounded shadow">
+<div class="max-w-3xl mx-auto bg-white border border-amber-100 rounded-2xl shadow-sm p-6">
 
-<h2 class="text-lg font-semibold mb-4">Edit Book</h2>
+    <h2 class="text-lg font-semibold text-stone-800 mb-6">
+        Edit Book
+    </h2>
 
-<form method="POST" action="{{ route('admin.books.update', $book) }}">
-@csrf
-@method('PUT')
+    <form method="POST" action="{{ route('admin.books.update', $book) }}" class="space-y-5">
+        @csrf
+        @method('PUT')
 
-<input name="title" value="{{ $book->title }}" class="w-full mb-3 p-2 border rounded">
-<input name="author" value="{{ $book->author }}" class="w-full mb-3 p-2 border rounded">
-<input name="category" value="{{ $book->category }}" class="w-full mb-3 p-2 border rounded">
+        {{-- TITLE + AUTHOR --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="text-sm text-stone-600">Title</label>
+                <input name="title" value="{{ old('title', $book->title) }}"
+                    class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
 
-<textarea name="description"
-    class="w-full mb-3 p-2 border rounded">{{ $book->description }}</textarea>
+            <div>
+                <label class="text-sm text-stone-600">Author</label>
+                <input name="author" value="{{ old('author', $book->author) }}"
+                    class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
+        </div>
 
-<input name="purchase_price" value="{{ $book->purchase_price }}"
-    class="w-full mb-3 p-2 border rounded">
+        {{-- CATEGORY + LIBRARY --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="text-sm text-stone-600">Category</label>
+                <select name="category_id"
+                    class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                    
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}"
+                            @selected(old('category_id', $book->category_id) == $category->id)>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
 
-<input name="rental_price" value="{{ $book->rental_price }}"
-    class="w-full mb-3 p-2 border rounded">
+                </select>
+            </div>
 
-<button class="w-full bg-indigo-600 text-white p-2 rounded">
-Update
-</button>
+            <div>
+                <label class="text-sm text-stone-600">Library</label>
+                <select name="library_id"
+                    class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
 
-</form>
+                    @foreach($libraries as $library)
+                        <option value="{{ $library->id }}"
+                            @selected(old('library_id', $book->library_id) == $library->id)>
+                            {{ $library->name }}
+                        </option>
+                    @endforeach
+
+                </select>
+            </div>
+        </div>
+
+        {{-- DESCRIPTION --}}
+        <div>
+            <label class="text-sm text-stone-600">Description</label>
+            <textarea name="description" rows="4"
+                class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">{{ old('description', $book->description) }}</textarea>
+        </div>
+
+        {{-- PRICES + QUANTITY --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="text-sm text-stone-600">Purchase Price</label>
+                <input name="purchase_price" value="{{ old('purchase_price', $book->purchase_price) }}"
+                    class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
+
+            <div>
+                <label class="text-sm text-stone-600">Rental Price</label>
+                <input name="rental_price" value="{{ old('rental_price', $book->rental_price) }}"
+                    class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
+
+            <div>
+                <label class="text-sm text-stone-600">Quantity</label>
+                <input name="quantity" value="{{ old('quantity', $book->quantity ?? 0) }}"
+                    class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
+        </div>
+
+        {{-- TAGS --}}
+        <div>
+            <label class="text-sm text-stone-600 mb-2 block">Tags</label>
+
+            <div class="flex flex-wrap gap-2">
+                @foreach($tags as $tag)
+                    <label class="flex items-center gap-2 px-3 py-1 border border-amber-200 rounded-full text-sm cursor-pointer hover:bg-amber-50">
+
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
+                            @checked($book->tags->contains($tag->id))>
+
+                        {{ $tag->name }}
+                    </label>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- SUBMIT --}}
+        <div class="pt-4">
+            <button class="w-full bg-amber-700 hover:bg-amber-800 text-white py-2.5 rounded-lg font-medium transition">
+                Update Book
+            </button>
+        </div>
+
+    </form>
 
 </div>
 

@@ -1,67 +1,127 @@
 @extends('layouts.admin')
 
+@section('title', 'Libraries')
+@section('header', 'Libraries Management')
+
 @section('content')
 
-<div class="flex justify-between mb-6">
-    <h2 class="text-xl font-semibold">Libraries</h2>
+{{-- HEADER --}}
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h2 class="text-xl font-semibold text-stone-800">Libraries</h2>
+        <p class="text-sm text-stone-400 mt-0.5">
+            {{ $libraries->count() }} libraries
+        </p>
+    </div>
 
     <a href="{{ route('admin.libraries.create') }}"
-       class="bg-indigo-600 text-white px-4 py-2 rounded">
+       class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm">
         + Add Library
     </a>
 </div>
 
-<table class="w-full bg-white rounded shadow text-sm">
+{{-- TABLE --}}
+<div class="bg-white border border-amber-100 rounded-2xl shadow-sm overflow-hidden">
 
-<thead class="bg-gray-50">
-<tr>
-    <th class="p-4 text-left">Name</th>
-    <th class="p-4 text-left">Owner</th>
-    <th class="p-4 text-left">Status</th>
-    <th class="p-4 text-right">Actions</th>
-</tr>
-</thead>
+    <table class="w-full text-sm">
 
-<tbody>
-@foreach($libraries as $library)
-<tr class="border-t">
+        {{-- HEADER --}}
+        <thead class="bg-amber-50 text-stone-500 text-xs uppercase tracking-wider">
+            <tr>
+                <th class="px-6 py-4 text-left">Name</th>
+                <th class="px-6 py-4 text-left">Owner</th>
+                <th class="px-6 py-4 text-left">Status</th>
+                <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+        </thead>
 
-    <td class="p-4">{{ $library->name }}</td>
+        {{-- BODY --}}
+        <tbody class="divide-y divide-amber-50">
 
-    <td class="p-4">{{ $library->user->name }}</td>
+            @forelse($libraries as $library)
+            <tr class="hover:bg-amber-50/40 transition">
 
-    <td class="p-4">
-        <span class="px-2 py-1 text-xs rounded
-            {{ $library->status === 'approved' ? 'bg-green-100' :
-               ($library->status === 'blocked' ? 'bg-red-100' : 'bg-yellow-100') }}">
-            {{ $library->status }}
-        </span>
-    </td>
+                {{-- NAME --}}
+                <td class="px-6 py-4 font-medium text-stone-800">
+                    {{ $library->name }}
+                </td>
 
-    <td class="p-4 text-right flex gap-2 justify-end">
+                {{-- OWNER --}}
+                <td class="px-6 py-4 text-stone-600">
+                    {{ $library->user->name }}
+                </td>
 
-        <form method="POST" action="{{ route('admin.libraries.approve', $library) }}">
-            @csrf
-            <button class="text-green-600">Approve</button>
-        </form>
+                {{-- STATUS --}}
+                <td class="px-6 py-4">
+                    <span class="px-2.5 py-1 text-xs rounded-full font-medium
 
-        <form method="POST" action="{{ route('admin.libraries.block', $library) }}">
-            @csrf
-            <button class="text-yellow-600">Block</button>
-        </form>
+                        @if($library->status === 'approved')
+                            bg-green-50 text-green-700
+                        @elseif($library->status === 'blocked')
+                            bg-red-50 text-red-600
+                        @else
+                            bg-yellow-50 text-yellow-700
+                        @endif
 
-        <form method="POST" action="{{ route('admin.libraries.destroy', $library) }}">
-            @csrf
-            @method('DELETE')
-            <button class="text-red-600">Delete</button>
-        </form>
+                    ">
+                        {{ ucfirst($library->status) }}
+                    </span>
+                </td>
 
-    </td>
+                {{-- ACTIONS --}}
+                <td class="px-6 py-4">
+                    <div class="flex items-center justify-end gap-2">
 
-</tr>
-@endforeach
-</tbody>
+                        {{-- APPROVE --}}
+                        <form method="POST" action="{{ route('admin.libraries.approve', $library) }}">
+                            @csrf
+                            <button class="text-xs text-stone-500 hover:text-green-600 px-2 py-1 rounded hover:bg-green-50 transition">
+                                Approve
+                            </button>
+                        </form>
 
-</table>
+                        {{-- BLOCK --}}
+                        <form method="POST" action="{{ route('admin.libraries.block', $library) }}">
+                            @csrf
+                            <button class="text-xs text-stone-500 hover:text-yellow-600 px-2 py-1 rounded hover:bg-yellow-50 transition">
+                                Block
+                            </button>
+                        </form>
+
+                        {{-- DELETE --}}
+                        <form method="POST" action="{{ route('admin.libraries.destroy', $library) }}"
+                              onsubmit="return confirm('Delete {{ $library->name }}?')">
+                            @csrf
+                            @method('DELETE')
+
+                            <button class="text-xs text-stone-500 hover:text-red-600 px-2 py-1 rounded hover:bg-red-50 transition">
+                                Delete
+                            </button>
+                        </form>
+
+                    </div>
+                </td>
+
+            </tr>
+
+            @empty
+            <tr>
+                <td colspan="4" class="px-6 py-16 text-center">
+
+                    <div class="flex flex-col items-center gap-2 text-stone-400">
+                        <span class="text-4xl">🏛️</span>
+                        <p class="font-medium">No libraries found</p>
+                        <p class="text-xs">Create your first library</p>
+                    </div>
+
+                </td>
+            </tr>
+            @endforelse
+
+        </tbody>
+
+    </table>
+
+</div>
 
 @endsection

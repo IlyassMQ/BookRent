@@ -27,7 +27,7 @@ class WithdrawController extends Controller
             ->first();
 
         if (!$transaction) {
-            return back()->with('error', 'Invalid code');
+            return redirect()->route('library.withdraw.index')->with('error', 'Invalid code');
         }
 
         return view('library.withdraw.index', compact('transaction'));
@@ -38,7 +38,7 @@ class WithdrawController extends Controller
         $transaction = Transaction::where('code_retrait', $request->code)->first();
 
         if (!$transaction || $transaction->status !== 'paid') {
-            return back()->with('error', 'Invalid or already used code');
+            return redirect()->route('library.withdraw.index')->with('error', 'Invalid or already used code');
         }
 
         $transaction->update([

@@ -45,4 +45,21 @@ class HomeController extends Controller
 
     return view('home.recommendations', compact('books'));
     }
+
+    public function nearby()
+{
+    $user = auth()->user();
+
+    $books = Book::with(['stocks.library'])
+        ->whereHas('stocks.library', function ($q) use ($user) {
+            $q->whereRaw('LOWER(libraries.city) = ?', [strtolower($user->city)]);
+        })
+        ->paginate(12);
+
+    foreach ($books as $book) {
+        $book->totalStock = $book->stocks->sum('quantity');
+    }
+
+    return view('home.nearby', compact('books'));
+}
 }

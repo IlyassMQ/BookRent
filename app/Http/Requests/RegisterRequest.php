@@ -28,6 +28,7 @@ class RegisterRequest extends FormRequest
             'password' => 'required|min:6|confirmed',
             'tags' => 'array',
             'tags.*' => 'exists:tags,id',
+            'city' => 'required|string|max:255',
         ];
     }
 }

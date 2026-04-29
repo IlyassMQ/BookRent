@@ -13,7 +13,8 @@ class AuthService
         $isFirstUser = User::count() === 0;
 
         if ($isFirstUser) {
-            $roleId = 1; 
+            $roleId = 1;
+            $city = 'Admin City'; 
         } else {
             $roleId = 2; 
         }
@@ -22,7 +23,8 @@ class AuthService
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => $roleId
+            'role_id' => $roleId,
+            'city' => $data['city'],
         ]);
 
         if (!empty($data['tags'])) {

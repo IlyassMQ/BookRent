@@ -24,7 +24,7 @@ class UserLibraryController extends Controller
     {
         $this->service->create(auth()->user(), $request->validated());
 
-        return redirect()->route('home') //to change to dashboard
+        return redirect()->route('library.dashboard') //to change to dashboard
             ->with('success', 'Library created successfully');
     }
     

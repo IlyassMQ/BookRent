@@ -16,6 +16,7 @@ use App\Http\Controllers\Library\LibraryShowController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\UserLibraryController;
 use App\Http\Controllers\Library\LibraryBookController;
+use App\Http\Controllers\User\ProfileController;
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.store');
@@ -81,12 +82,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/library', [UserLibraryController::class, 'store'])->name('library.store');
     Route::get('/library', [UserLibraryController::class, 'index'])->name('libraries.index');
     Route::get('/recommendations', [HomeController::class, 'recommendations'])->name('recommendations');
+    Route::get('/nearby', [HomeController::class, 'nearby'])->name('nearby');
+
+    // Profile / Dashboard
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     //transaction 
 
-    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
-
-        Route::get('/library/transactions', [LibraryTransactionController::class, 'index'])->name('library.transactions');
+    
 });
 
 Route::middleware(['auth','role:library'])->prefix('library')->name('library.')->group(function () {
@@ -108,7 +112,9 @@ Route::middleware(['auth','role:library'])->prefix('library')->name('library.')-
 
         Route::post('/withdraw/confirm', [WithdrawController::class, 'confirm'])->name('withdraw.confirm');
 
-    
+     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+
+        Route::get('/library/transactions', [LibraryTransactionController::class, 'index'])->name('library.transactions');
         
 
 });
@@ -143,4 +149,14 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/stripe/webhook', [PaymentController::class, 'webhook']);
+
+// User Profile Routes
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/dashboard', [ProfileController::class, 'index'])->name('dashboard');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::get('/orders', [ProfileController::class, 'orders'])->name('orders');
+    Route::get('/orders/{transaction}', [ProfileController::class, 'showOrder'])->name('orders.show');
+});
 

@@ -85,6 +85,35 @@
             @enderror
         </div>
 
+    <div class="group">
+            <label class="block text-sm font-medium text-[#5C2E0B] mb-2 serif-font">
+                <svg class="inline-block w-4 h-4 mr-1 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                City
+            </label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+                <input type="text"
+                       name="city"
+                       value="{{ old('city') }}"
+                       placeholder="City"
+                       class="w-full pl-10 pr-3 py-3 rounded-lg border-2 border-amber-200 focus:border-amber-600 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all duration-200 bg-white/90 text-stone-800 placeholder-stone-400">
+            </div>
+            @error('city')
+                <p class="text-red-600 text-xs mt-2 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
         {{-- PASSWORD with lock icon --}}
         <div class="group">
             <label class="block text-sm font-medium text-[#5C2E0B] mb-2 serif-font">

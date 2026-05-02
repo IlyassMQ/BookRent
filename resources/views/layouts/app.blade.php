@@ -149,7 +149,7 @@
 
                     @auth
                         {{-- Show My Profile only for regular users (not library accounts) --}}
-                        @if(!auth()->user()->library && auth()->user()->role !== 'library')
+                        @if(!auth()->user()->library && auth()->user()->role?->name !== 'library')
                             <a href="{{ route('user.dashboard') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,6 +158,15 @@
                                 </svg>
                                 My Profile
                             </a>
+                        @endif
+                        @if(auth()->user()->library && auth()->user()->library->status === 'pending')
+                            <div class="bg-yellow-100 text-yellow-700 p-2 text-center text-sm">
+                                Your library is under review
+                            </div>
+                        @elseif(auth()->user()->library && auth()->user()->library->status === 'blocked')
+                            <div class="bg-red-100 text-red-700 p-2 text-center text-sm">
+                                Your library is blocked
+                            </div>    
                         @endif
 
                         {{-- USER MENU DROPDOWN --}}
@@ -174,9 +183,9 @@
                             <div
                                 class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-amber-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 dropdown-menu z-50">
                                 <div class="py-2">
-                                    
-                                    @if (!auth()->user()->library && auth()->user()->role !== 'library')
-                                        <a href="{{ route('transactions.index') }}"
+
+                                    @if (auth()->user()->role->name === 'user')
+                                        <a href="{{ route('user.orders') }}"
                                             class="flex items-center gap-3 px-4 py-2.5 text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -185,7 +194,7 @@
                                             </svg>
                                             My Orders
                                         </a>
-                                        
+
                                         <a href="{{ route('recommendations') }}"
                                             class="flex items-center gap-3 px-4 py-2.5 text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,7 +218,7 @@
                                     @endif
 
                                     {{-- Library Dashboard for library accounts --}}
-                                    @if(auth()->user()->library)
+                                    @if(auth()->user()->role->name === 'library')
                                         <a href="{{ route('library.dashboard') }}"
                                             class="flex items-center gap-3 px-4 py-2.5 text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,7 +260,7 @@
                                     @endif
 
                                     {{-- Admin Panel --}}
-                                    @if(auth()->user()->role === 'admin')
+                                    @if(auth()->user()->role?->name === 'admin')
                                         <a href="{{ route('admin.dashboard') }}"
                                             class="flex items-center gap-3 px-4 py-2.5 bg-amber-700 text-white hover:bg-amber-800 transition mx-2 rounded-lg">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

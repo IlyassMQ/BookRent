@@ -9,7 +9,7 @@
     {{-- BREADCRUMB NAVIGATION --}}
     <div class="mb-6">
         <div class="flex items-center gap-2 text-sm text-stone-500">
-            <a href="{{ route('libraries.index') }}" class="hover:text-amber-700 transition flex items-center gap-1">
+            <a href="{{ route('home') }}" class="hover:text-amber-700 transition flex items-center gap-1">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                 </svg>
@@ -118,6 +118,28 @@
                                class="w-full pl-10 pr-3 py-2.5 rounded-lg border-2 border-amber-200 focus:border-amber-600 focus:ring-2 focus:ring-amber-200 transition-all @error('address') border-red-500 @enderror">
                     </div>
                     <p class="text-xs text-stone-400 mt-1">Full street address for your library</p>
+                </div>
+                <div class="group">
+                    <label class="block text-sm font-medium text-[#5C2E0B] mb-2 serif-font">
+                        <svg class="inline-block w-4 h-4 mr-1 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        City *
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                        </div>
+                        <input type="text" 
+                               name="city"
+                               value="{{ old('city') }}"
+                               placeholder="City"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-lg border-2 border-amber-200 focus:border-amber-600 focus:ring-2 focus:ring-amber-200 transition-all @error('city') border-red-500 @enderror">
+                    </div>
+                    <p class="text-xs text-stone-400 mt-1">City where your library is located</p>
                 </div>
 
                 {{-- HIDDEN GEO FIELDS --}}

@@ -16,6 +16,7 @@ class StoreLibraryRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
             'geo_lat' => 'required|numeric|between:-90,90',
             'geo_lng' => 'required|numeric|between:-180,180',
         ];

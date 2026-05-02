@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Models\Library;
 use App\Services\Home\BookSearchService;
 use Auth;
 
@@ -62,4 +63,12 @@ class HomeController extends Controller
 
     return view('home.nearby', compact('books'));
 }
+
+    public function libraries() {
+        $libraries = Library::where('status', 'approved')
+        ->withCount('books')
+        ->get();
+
+    return view('home.libraries', compact('libraries'));
+    }
 }

@@ -31,7 +31,7 @@ class PaymentController extends Controller
 
     public function success()
     {
-        return redirect()->route('transactions.index')
+        return redirect()->route('user.orders')
             ->with('success', 'Payment processing...');
     }
 

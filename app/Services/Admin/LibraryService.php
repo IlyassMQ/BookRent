@@ -26,15 +26,24 @@ class LibraryService
     public function approve(Library $library): void
     {
         $library->update(['status' => 'approved']);
+        $user = $library->user;
+
+        $user->update(['role_id' => 3]);
     }
 
     public function block(Library $library): void
     {
         $library->update(['status' => 'blocked']);
+        $user = $library->user;
+        $user->update(['role_id' => 2]);
     }
 
     public function delete(Library $library): void
     {
         $library->delete();
+
+        $user = $library->user;
+
+        $user->update(['role_id' => 2]);
     }
 }

@@ -125,8 +125,7 @@ Route::middleware(['auth', 'role:library', 'ban'])->prefix('library')->name('lib
         Route::post('/withdraw/search', [WithdrawController::class, 'search'])->name('withdraw.search');
         Route::post('/withdraw/confirm', [WithdrawController::class, 'confirm'])->name('withdraw.confirm');
 
-        Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
-        Route::get('/library/transactions', [LibraryTransactionController::class, 'index'])->name('library.transactions');
+        Route::get('/transactions', [LibraryTransactionController::class, 'index'])->name('transactions');
         Route::get('/edit', [UserLibraryController::class, 'edit'])->name('edit');
         Route::put('/edit', [UserLibraryController::class, 'update'])->name('update');
 });

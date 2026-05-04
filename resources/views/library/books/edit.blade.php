@@ -291,10 +291,6 @@
                                 <p class="text-xs text-stone-500">Last Updated</p>
                                 <p class="text-xs text-stone-600">{{ $book->updated_at->format('M d, Y') }}</p>
                             </div>
-                            <div>
-                                <p class="text-xs text-stone-500">Total Stock</p>
-                                <p class="text-sm font-semibold text-amber-700">{{ $book->totalStock ?? 0 }} copies</p>
-                            </div>
                         </div>
                     </div>
                 </div>

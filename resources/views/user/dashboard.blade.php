@@ -28,7 +28,7 @@
                     <p class="text-xs text-stone-500">Total Orders</p>
                 </div>
                 <div class="bg-white rounded-xl shadow-md border border-amber-100 p-4 text-center">
-                    <p class="text-2xl font-bold text-blue-700">{{ $activeRentals }}</p>
+                    <p class="text-2xl font-bold text-blue-700">{{ count($activeRentals) }}</p>
                     <p class="text-xs text-stone-500">Active Rentals</p>
                 </div>
                 <div class="bg-white rounded-xl shadow-md border border-amber-100 p-4 text-center">

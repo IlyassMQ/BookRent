@@ -253,7 +253,7 @@
                         <div class="mt-auto">
                             @guest
                                 <a href="{{ route('login') }}" class="block w-full text-center border-2 border-amber-600 text-amber-700 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-50 transition">
-                                    Login to View
+                                    Login to Buy or Rent
                                 </a>
                             @else
                                 @if(auth()->user()->library && auth()->user()->library->id === $book->library_id)

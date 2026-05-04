@@ -147,6 +147,13 @@
             </svg>
             Edit Library Info
         </a>
+         <a href="{{ route('library.transactions') }}"
+           class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm font-medium">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"></path>
+            </svg>
+            View Orders
+        </a>
     </div>
 
     {{-- MAIN GRID --}}

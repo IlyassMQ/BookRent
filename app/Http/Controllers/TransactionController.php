@@ -17,16 +17,6 @@ class TransactionController extends Controller
         $this->service = $service;
     }
 
-    public function index()
-    {
-    $transactions = auth()->user()
-        ->transactions()
-        ->with(['book', 'payment'])
-        ->latest()
-        ->get();
-
-    return view('transactions.index', compact('transactions'));
-    }
 
     public function summary(Request $request, Book $book)
 {

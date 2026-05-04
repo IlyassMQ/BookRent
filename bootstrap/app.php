@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Middleware\BanMiddleware;
-use App\Http\Middleware\LibraryApproved;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,7 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'ban' =>BanMiddleware::class,
-            'approved' => LibraryApproved::class,
         ]);
         $middleware->validateCsrfTokens(except: [
             'stripe/webhook',

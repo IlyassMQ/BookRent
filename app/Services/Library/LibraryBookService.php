@@ -16,7 +16,6 @@ class LibraryBookService
         $path = null;
         }
 
-        // 1) Create book
         $book = Book::create([
             'title' => $data['title'],
             'author' => $data['author'],
@@ -29,7 +28,6 @@ class LibraryBookService
             'image' => $path,
         ]);
 
-        // 2) Create stock automatically
         Stock::create([
             'library_id' => $libraryId,
             'book_id' => $book->id,
@@ -41,14 +39,11 @@ class LibraryBookService
 
     public function update($user, $book, array $data)
 {
-    // Ownership check
     if ($book->library_id !== $user->library->id) {
         abort(403);
     }
 
-    // handle image
     if (isset($data['image'])) {
-        //delete old image
         if ($book->image) {
             Storage::disk('public')->delete($book->image);
         }

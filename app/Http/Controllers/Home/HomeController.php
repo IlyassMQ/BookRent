@@ -66,8 +66,11 @@ class HomeController extends Controller
 
     public function libraries() {
         $libraries = Library::where('status', 'approved')
-        ->withCount('books')
         ->get();
+        
+        foreach ($libraries as $library) {
+        $library->bookCount = $library->books->count();
+        }
 
     return view('home.libraries', compact('libraries'));
     }

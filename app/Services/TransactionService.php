@@ -15,7 +15,6 @@ class TransactionService
 
         $stock = Stock::where('book_id', $book->id)
             ->where('library_id', $book->library_id)
-            ->lockForUpdate()
             ->first();
 
         if (!$stock || $stock->quantity < $quantity) {

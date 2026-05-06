@@ -8,27 +8,21 @@ class BookSearchService
 {
     public function search(array $filters)
     {
-        $query = Book::with(['tags', 'stocks.library']);
+        $books = Book::with(['category', 'stocks'])->paginate(12);
 
-        if (!empty($filters['search'])) {
-            $search = $filters['search'];
+    if (!empty($filters['search'])) {
+        $search = $filters['search'];
 
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('author', 'like', "%{$search}%")
-                  ->orWhereHas('category', function ($q2) use ($search) {
-                  $q2->where('name', 'like', "%{$search}%");
-              });
-                  
-            });
-        }
+        $books = Book::with(['category', 'stocks'])
+            ->where('title', 'like', "%$search%")
+            ->orWhere('author', 'like', "%$search%")
+            ->paginate(12);
+    }
 
-        $books = $query->paginate(12)->withQueryString();
+    foreach ($books as $book) {
+        $book->totalStock = $book->stocks->sum('quantity');
+    }
 
-        foreach ($books as $book) {
-            $book->totalStock = $book->stocks->sum('quantity');
-        }
-
-        return $books;
+    return $books;
     }
 }

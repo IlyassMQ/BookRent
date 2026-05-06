@@ -52,10 +52,10 @@ class HomeController extends Controller
     $user = auth()->user();
 
     $books = Book::with(['stocks.library'])
-        ->whereHas('stocks.library', function ($q) use ($user) {
-            $q->whereRaw('LOWER(libraries.city) = ?', [strtolower($user->city)]);
-        })
-        ->paginate(12);
+    ->whereHas('stocks.library', function ($q) use ($user) {
+        $q->where('city', $user->city);
+    })
+    ->paginate(12);
 
     foreach ($books as $book) {
         $book->totalStock = $book->stocks->sum('quantity');

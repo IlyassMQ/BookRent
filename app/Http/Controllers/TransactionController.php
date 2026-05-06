@@ -20,8 +20,16 @@ class TransactionController extends Controller
 
     public function summary(Request $request, Book $book)
 {
-    $quantity = max(1, (int) $request->input('quantity', 1));
-    $days = max(1, (int) $request->input('days', 1));
+    $quantity = $request->input('quantity');
+    $days = $request->input('days');
+
+    if (!$quantity || $quantity < 1) {
+        $quantity = 1;
+    }
+
+    if (!$days || $days < 1) {
+        $days = 1;
+    }
 
     $type = $request->has('days') ? 'rental' : 'purchase';
 
@@ -51,7 +59,7 @@ class TransactionController extends Controller
         $days = (int) $request->days;
         $type = $request->type;
 
-        $transaction = app(TransactionService::class)
+        $transaction = $this->service
             ->create(auth()->user(), $book, $type, $quantity, $days);
 
         return redirect()->route('payment.checkout', $transaction->payment->id);

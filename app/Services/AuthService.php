@@ -16,7 +16,8 @@ class AuthService
             $roleId = 1;
             $city = 'Admin City'; 
         } else {
-            $roleId = 2; 
+            $roleId = 2;
+            $city = $data['city']; 
         }
 
         $user = User::create([
@@ -24,7 +25,7 @@ class AuthService
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role_id' => $roleId,
-            'city' => $data['city'],
+            'city' => $city,
         ]);
 
         if (!empty($data['tags'])) {

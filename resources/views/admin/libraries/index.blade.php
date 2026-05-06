@@ -58,22 +58,6 @@
                        placeholder="Search libraries by name or owner..." 
                        class="w-full pl-10 pr-4 py-2 rounded-lg border-2 border-amber-200 focus:border-amber-600 focus:ring-2 focus:ring-amber-200 transition-all">
             </div>
-            <div class="flex gap-2">
-                <select name="status" class="px-4 py-2 rounded-lg border-2 border-amber-200 bg-white text-stone-700 focus:border-amber-600 focus:ring-2 focus:ring-amber-200 transition-all text-sm">
-                    <option value="">All Status</option>
-                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="blocked" {{ request('status') == 'blocked' ? 'selected' : '' }}>Blocked</option>
-                </select>
-                <button type="submit" class="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition font-medium text-sm">
-                    Filter
-                </button>
-                @if(request('search') || request('status'))
-                    <a href="{{ route('admin.libraries.index') }}" class="px-4 py-2 border-2 border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 transition text-sm">
-                        Clear
-                    </a>
-                @endif
-            </div>
         </form>
     </div>
 

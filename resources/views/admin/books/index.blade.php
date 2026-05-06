@@ -52,22 +52,6 @@
                        placeholder="Search by title, author, or ISBN..." 
                        class="w-full pl-10 pr-4 py-2 rounded-lg border-2 border-amber-200 focus:border-amber-600 focus:ring-2 focus:ring-amber-200 transition-all">
             </div>
-            <div class="flex gap-2">
-                <select class="px-4 py-2 rounded-lg border-2 border-amber-200 bg-white text-stone-700 focus:border-amber-600 focus:ring-2 focus:ring-amber-200 transition-all text-sm">
-                    <option>All Categories</option>
-                    @php
-                        $categories = $books->pluck('category.name')->unique();
-                    @endphp
-                    @foreach($categories as $category)
-                        @if($category)
-                            <option>{{ $category }}</option>
-                        @endif
-                    @endforeach
-                </select>
-                <button class="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition font-medium text-sm">
-                    Filter
-                </button>
-            </div>
         </div>
     </div>
 

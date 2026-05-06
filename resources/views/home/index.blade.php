@@ -79,7 +79,7 @@
                     <input type="text"
                            name="search"
                            value="{{ request('search') }}"
-                           placeholder="Search by title, author, or category..."
+                           placeholder="Search by title, author"
                            class="w-full pl-10 pr-3 py-3 rounded-lg border-2 border-amber-200 focus:border-amber-600 focus:ring-2 focus:ring-amber-200 transition-all">
                 </div>
                 <button type="submit" class="bg-gradient-to-r from-[#8B4513] to-[#6B3410] hover:from-[#6B3410] hover:to-[#5C2E0B] text-white px-6 rounded-lg transition shadow-md hover:shadow-lg font-medium">
